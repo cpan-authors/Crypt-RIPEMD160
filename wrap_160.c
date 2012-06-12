@@ -1,4 +1,5 @@
 #include <string.h>
+#include <stdio.h>
 
 #include "rmd160.h"
 #include "wrap_160.h"
@@ -72,7 +73,7 @@ void RIPEMD160_final(RIPEMD160 ripemd160)
 #endif
 {
   if (ripemd160->local != ripemd160->count_lo % 64) {
-    printf("local != count \% 64\n");
+    printf("local != count %% 64\n");
   }
 
   MDfinish(ripemd160->MDbuf,
