@@ -3,8 +3,7 @@ package Crypt::RIPEMD160;
 use strict;
 
 require DynaLoader;
-require AutoLoader;
-our @ISA = qw(AutoLoader DynaLoader);
+our @ISA = qw(DynaLoader);
 
 # Items to export into callers namespace by default
 
