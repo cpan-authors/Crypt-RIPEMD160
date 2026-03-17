@@ -10,7 +10,7 @@
 #define RMDsize 160
 
 #ifndef RMD160_DIGESTSIZE
-#define RMD160_DIGESTSIZE  20;
+#define RMD160_DIGESTSIZE  20
 #endif
 
 typedef struct {
