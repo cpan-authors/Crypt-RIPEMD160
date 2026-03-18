@@ -1,5 +1,4 @@
 #include <string.h>
-#include <stdio.h>
 
 #include "rmd160.h"
 #include "wrap_160.h"
@@ -72,10 +71,6 @@ void RIPEMD160_final(Crypt__RIPEMD160 ripemd160)
 void RIPEMD160_final(RIPEMD160 ripemd160)
 #endif
 {
-  if (ripemd160->local != ripemd160->count_lo % 64) {
-    printf("local != count %% 64\n");
-  }
-
   MDfinish(ripemd160->MDbuf,
 	   ripemd160->data,
 	   (dword) ripemd160->count_lo,
@@ -155,72 +150,5 @@ void RIPEMD160_HMAC(RIPEMD160 ripemd160,
   /* clean up secret keys */
   memset(k_ipad, 0x00, sizeof(k_ipad));
   memset(k_opad, 0x00, sizeof(k_opad));
-}
-#endif
-/* ************************************************************************* */
-
-/* #define MAINTEST */
-
-#ifdef MAINTEST
-#include <stdio.h>
-#include <stdlib.h>
-
-void print_hash(RIPEMD160 ripemd160)
-{
-  byte hashcode[RMDsize/8];
-  int i;  
-
-  for (i=0; i<RMDsize/8; i+=4) {
-    hashcode[i]   =  ripemd160->MDbuf[i>>2];
-    hashcode[i+1] = (ripemd160->MDbuf[i>>2] >>  8);
-    hashcode[i+2] = (ripemd160->MDbuf[i>>2] >> 16);
-    hashcode[i+3] = (ripemd160->MDbuf[i>>2] >> 24);
-  }
-  printf("hashcode: ");
-  for (i=0; i<RMDsize/8; i++)
-    printf("%02x", hashcode[i]);
-  printf("\n");
-}
-
-int main (void) 
-{
-  RIPEMD160_INFO ripemd160_info;
-  byte a[1000001];
-
-  int i;  
-  long L;
-
-  RIPEMD160_init(&ripemd160_info);
-
-  /*
-    RIPEMD160_update(&ripemd160_info, (byte *) "a", (dword) strlen("a"));
-    RIPEMD160_update(&ripemd160_info, (byte *) "b", (dword) strlen("b"));
-    RIPEMD160_update(&ripemd160_info, (byte *) "c", (dword) strlen("c"));
-  */
-
-  /*
-    memset(a, 'a', 1000000);
-    a[1000000] = 0;
-    RIPEMD160_update(&ripemd160_info, (byte *) a, (dword) 1000000);
-  */
-
-  
-  for (L = 0; L<1000000; L++) { 
-    RIPEMD160_update(&ripemd160_info, (byte *) "a", (dword) strlen("a")); 
-  }
-  
-  /*
-    for (i = 0; i<8; i++) { 
-    RIPEMD160_update(&ripemd160_info_info, 
-    (byte *) "1234567890", 
-    (dword) strlen("1234567890")); 
-    }
-  */
-  
-  RIPEMD160_final(&ripemd160_info);
-
-  print_hash(&ripemd160_info);
-  
-  return(0);
 }
 #endif
