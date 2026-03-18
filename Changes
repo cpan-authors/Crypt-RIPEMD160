@@ -16,7 +16,7 @@ Revision history for Perl extension Crypt::RIPEMD160.
     - Move modules to standard lib/Crypt/RIPEMD160/ directory layout.
     - Add MANIFEST.SKIP file and update MANIFEST and .gitignore.
     - Add CI testing via GitHub Actions and Travis CI.
-
+    - Update META files with correct version and repository URLs.
 0.06 Tue June 9 2015
     - Fix for Compiler warnings about printf statement - Thanks flichtenheld
 
