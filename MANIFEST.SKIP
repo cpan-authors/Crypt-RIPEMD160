@@ -5,7 +5,6 @@
 ^RIPEMD160\.c$
 \.o$
 ^\.gitignore$
-^.travis\.yml$
 ^blib/
 ^Makefile$
 ^MANIFEST.bak$
