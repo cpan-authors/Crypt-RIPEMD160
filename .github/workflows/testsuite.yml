@@ -63,7 +63,7 @@ jobs:
       - id: action
         uses: perl-actions/perl-versions@v1
         with:
-          since-perl: v5.10
+          since-perl: 5.10
           with-devel: true
 
   linux:
@@ -76,14 +76,14 @@ jobs:
       AUTHOR_TESTING: 1
       AUTOMATED_TESTING: 1
       RELEASE_TESTING: 1
-      PERL_CARTON_PATH: $GITHUB_WORKSPACE/local
 
     strategy:
       fail-fast: false
       matrix:
         perl-version: ${{ fromJson (needs.perl-versions.outputs.perl-versions) }}
 
-    container: perldocker/perl-tester:${{ matrix.perl-version }}
+    container:
+      image: perldocker/perl-tester:${{ matrix.perl-version }}
 
     steps:
       - uses: actions/checkout@v4
@@ -107,7 +107,6 @@ jobs:
       AUTHOR_TESTING: 1
       AUTOMATED_TESTING: 1
       RELEASE_TESTING: 1
-      PERL_CARTON_PATH: $GITHUB_WORKSPACE/local
 
     steps:
       - uses: actions/checkout@v4
