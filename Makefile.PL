@@ -36,9 +36,9 @@ WriteMakefile(
         },
         resources => {
             license => 'http://dev.perl.org/licenses/',
-            homepage   => 'http://wiki.github.com/toddr/Crypt-RIPEMD160',
-            bugtracker => 'https://github.com/toddr/Crypt-RIPEMD160/issues',
-            repository => 'https://github.com/toddr/Crypt-RIPEMD160/tree/master',
+            homepage   => 'https://github.com/cpan-authors/Crypt-RIPEMD160',
+            bugtracker => 'https://github.com/cpan-authors/Crypt-RIPEMD160/issues',
+            repository => 'https://github.com/cpan-authors/Crypt-RIPEMD160/tree/master',
 #            MailingList => 'http://groups.google.com/group/Crypt-RIPEMD160',
         },
     },
