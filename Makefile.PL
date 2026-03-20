@@ -4,9 +4,6 @@ use strict;
 use warnings;
 
 use ExtUtils::MakeMaker;
-use Config;
-
-my  $ENDIAN = ($Config{'byteorder'} eq '1234') ? 'LITTLE_ENDIAN' : 'BIG_ENDIAN';
 
 WriteMakefile(
     'DISTNAME'     => 'Crypt-RIPEMD160',
@@ -24,8 +21,6 @@ WriteMakefile(
     'clean'               => { FILES => 'Crypt-RIPEMD160-*' },
 
     'OBJECT'       => q[RIPEMD160$(OBJ_EXT) rmd160$(OBJ_EXT) wrap_160$(OBJ_EXT)],
-    'CONFIG'       => ['byteorder'], # Used to determine 64-bitness
-    'DEFINE'       => '-DPERL_BYTEORDER=$(BYTEORDER)',
 
     META_MERGE  => {
 #        recommends => {

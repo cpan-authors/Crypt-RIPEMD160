@@ -30,4 +30,5 @@ void RIPEMD160_update(Crypt__RIPEMD160 ripemd160, byte *strptr, dword len);
 
 void RIPEMD160_final(Crypt__RIPEMD160 ripemd160);
 
+
 #endif
