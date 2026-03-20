@@ -1,5 +1,22 @@
 Revision history for Perl extension Crypt::RIPEMD160.
 
+0.07 Wed Oct 21 2020
+
+  Bug fixes:
+    - Rename internal C subroutine compress() to rmd160_compress() to avoid
+      symbol conflict with libz on CentOS 8.
+
+  Improvements:
+    - Replace indirect object notation (new Crypt::RIPEMD160) with direct
+      method calls (Crypt::RIPEMD160->new) in code and POD examples.
+    - Drop unused Exporter and 'use vars' in favor of 'our' declarations.
+    - Move bug tracking metadata from rt.cpan.org to GitHub Issues.
+
+  Maintenance:
+    - Move modules to standard lib/Crypt/RIPEMD160/ directory layout.
+    - Add MANIFEST.SKIP file and update MANIFEST and .gitignore.
+    - Add CI testing via GitHub Actions and Travis CI.
+
 0.06 Tue June 9 2015
     - Fix for Compiler warnings about printf statement - Thanks flichtenheld
 
