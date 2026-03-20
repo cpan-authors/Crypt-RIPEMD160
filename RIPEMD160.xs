@@ -52,7 +52,6 @@ rmd160_add(ripemd160, ...)
 	Crypt::RIPEMD160	ripemd160
     CODE:
 	{
-	    SV *svdata;
 	    STRLEN len;
 	    byte *strptr;
 	    int i;
