@@ -152,52 +152,47 @@ following should all give the same result:
     use Crypt::RIPEMD160;
     $ripemd160 = Crypt::RIPEMD160->new;
 
-    die "Can't open /etc/passwd ($!)\n" unless open(P, "/etc/passwd");
+    open(my $fh, '<', '/etc/passwd')
+        or die "Can't open /etc/passwd: $!\n";
 
-    seek(P, 0, 0);
+    seek($fh, 0, 0);
     $ripemd160->reset;
-    $ripemd160->addfile(P);
+    $ripemd160->addfile($fh);
     $d = $ripemd160->hexdigest;
-    print "addfile (handle name) = $d\n";
+    print "addfile (lexical filehandle) = $d\n";
 
-    seek(P, 0, 0);
+    seek($fh, 0, 0);
     $ripemd160->reset;
-    $ripemd160->addfile(\*P);
-    $d = $ripemd160->hexdigest;
-    print "addfile (type-glob reference) = $d\n";
-
-    seek(P, 0, 0);
-    $ripemd160->reset;
-    while (<P>)
+    while (<$fh>)
     {
         $ripemd160->add($_);
     }
     $d = $ripemd160->hexdigest;
     print "Line at a time = $d\n";
 
-    seek(P, 0, 0);
+    seek($fh, 0, 0);
     $ripemd160->reset;
-    $ripemd160->add(<P>);
+    $ripemd160->add(<$fh>);
     $d = $ripemd160->hexdigest;
     print "All lines at once = $d\n";
 
-    seek(P, 0, 0);
+    seek($fh, 0, 0);
     $ripemd160->reset;
-    while (read(P, $data, (rand % 128) + 1))
+    while (read($fh, $data, int(rand(128)) + 1))
     {
         $ripemd160->add($data);
     }
     $d = $ripemd160->hexdigest;
     print "Random chunks = $d\n";
 
-    seek(P, 0, 0);
+    seek($fh, 0, 0);
     $ripemd160->reset;
-    undef $/;
-    $data = <P>;
+    local $/;
+    $data = <$fh>;
     $d = $ripemd160->hexhash($data);
     print "Single string = $d\n";
 
-    close(P);
+    close($fh);
 
 =head1 NOTE
 
