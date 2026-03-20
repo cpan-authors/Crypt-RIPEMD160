@@ -5,6 +5,7 @@ use warnings;
 
 use ExtUtils::MakeMaker;
 
+
 WriteMakefile(
     'DISTNAME'     => 'Crypt-RIPEMD160',
     'NAME'                => 'Crypt::RIPEMD160',
@@ -23,19 +24,14 @@ WriteMakefile(
     'OBJECT'       => q[RIPEMD160$(OBJ_EXT) rmd160$(OBJ_EXT) wrap_160$(OBJ_EXT)],
 
     META_MERGE  => {
-#        recommends => {
-#            'Test::Pod::Coverage' => 1.04,
-#            'Test::Pod' => 1.14,
-#        },
         build_requires => {
             'Test::More' => 0,  # For testing
         },
         resources => {
-            license => 'http://dev.perl.org/licenses/',
+            license => 'https://dev.perl.org/licenses/',
             homepage   => 'https://github.com/cpan-authors/Crypt-RIPEMD160',
             bugtracker => 'https://github.com/cpan-authors/Crypt-RIPEMD160/issues',
-            repository => 'https://github.com/cpan-authors/Crypt-RIPEMD160/tree/master',
-#            MailingList => 'http://groups.google.com/group/Crypt-RIPEMD160',
+            repository => 'https://github.com/cpan-authors/Crypt-RIPEMD160',
         },
     },
 );
