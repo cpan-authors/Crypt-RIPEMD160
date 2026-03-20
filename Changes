@@ -12,6 +12,8 @@ Revision history for Perl extension Crypt::RIPEMD160.
       wrap_160.c and wrap_160.h. PR #19
     - Fix rand bug, bareword filehandle, and stale print in t/01test.t.
       PR #18
+    - Cast unsigned char* to const char* in newSVpv() call to silence
+      -Wpointer-sign compiler warning on macOS/clang. GH #20, PR #21
 
   Improvements:
     - Modernize DynaLoader to XSLoader. PR #19
