@@ -1,13 +1,57 @@
-*.c
-*.bs
-*.o
-*.tar
+# Build artifacts (ExtUtils::MakeMaker / Module::Build)
+blib*
+Makefile
+Build
+_build*
+/pm_to_blib*
+Build.bat
+
+# Test coverage output (Devel::Cover)
+/cover_db
+
+# Distribution tarballs
 *.gz
+*.bz2
+
+# Temporary and backup files
+*.tmp
+*.old
+
+# Compiled XS artifacts
+*.o
+*.bs
+
+# Vim swap files
+*.swp
+*.swo
+
+# Generated META files (created by Makefile.PL / Build.PL)
+/META.*
+/MYMETA.*
+
+# Patch residue (diff/patch)
+*.rej
+*.orig
+
+# perltidy backup and error files
+*.bak
+*.ERR
+
+# macOS metadata
+.DS_Store
+
+# IDE and editor files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Perl debugger history
+.perldb
+
+# Environment / secrets
+.env
+
+#Local
 /Crypt-RIPEMD160-*/
-/Makefile
-/Makefile.old
-/blib/
-/pm_to_blib
-/MYMETA.json
-/MYMETA.yml
-/MANIFEST.bak
+*.c
