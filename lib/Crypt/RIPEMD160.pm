@@ -2,14 +2,10 @@ package Crypt::RIPEMD160;
 
 use strict;
 
-require DynaLoader;
-our @ISA = qw(DynaLoader);
-
-# Items to export into callers namespace by default
-
 our $VERSION = '0.07';
 
-bootstrap Crypt::RIPEMD160 $VERSION;
+use XSLoader;
+XSLoader::load('Crypt::RIPEMD160', $VERSION);
 
 #package RIPEMD160; # Package-Definition like in Crypt::IDEA
 
