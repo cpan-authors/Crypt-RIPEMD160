@@ -1,6 +1,6 @@
 #requires "Git::Repository"             => 0;
 #recommends "YAML"             => "0";
-requires 'DynaLoader' => 0;
+requires 'XSLoader' => 0;
 requires 'Carp' => 0;
 
 on "test" => sub {
