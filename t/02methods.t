@@ -264,6 +264,48 @@ subtest 'MAC reset and reuse' => sub {
     is($hex1, $hex2, 'two fresh MAC instances produce same result');
 };
 
+subtest 'MAC reset after mac() preserves key' => sub {
+    # mac() and hexmac() zero the key material, but reset() must still
+    # reconstruct the correct HMAC state from the original key.
+    my $key = "secret key";
+    my $data = "test data";
+
+    my $mac = Crypt::RIPEMD160::MAC->new($key);
+    $mac->add($data);
+    my $hex1 = $mac->hexmac;
+
+    # reset() after hexmac() should allow correct reuse
+    $mac->reset();
+    $mac->add($data);
+    my $hex2 = $mac->hexmac;
+
+    # Fresh instance as ground truth
+    my $fresh = Crypt::RIPEMD160::MAC->new($key);
+    $fresh->add($data);
+    my $hex3 = $fresh->hexmac;
+
+    is($hex1, $hex3, 'first mac matches fresh instance');
+    is($hex2, $hex3, 'mac after reset matches fresh instance');
+};
+
+subtest 'MAC reset after mac() with long key' => sub {
+    # Keys > 64 bytes are hashed before use; reset must handle this too
+    my $key = chr(0xaa) x 80;
+    my $data = "Test Using Larger Than Block-Size Key - Hash Key First";
+
+    my $mac = Crypt::RIPEMD160::MAC->new($key);
+    $mac->add($data);
+    my $hex1 = $mac->hexmac;
+
+    $mac->reset();
+    $mac->add($data);
+    my $hex2 = $mac->hexmac;
+
+    is($hex1, '6466ca07 ac5eac29 e1bd523e 5ada7605 b791fd8b',
+       'first mac matches RFC 2286 vector');
+    is($hex2, $hex1, 'mac after reset matches first mac');
+};
+
 subtest 'MAC mac() returns 20 bytes' => sub {
     my $mac = Crypt::RIPEMD160::MAC->new('key');
     $mac->add('data');
