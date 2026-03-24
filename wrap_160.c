@@ -11,7 +11,7 @@ void RIPEMD160_init(Crypt__RIPEMD160 ripemd160)
   ripemd160->count_hi = (dword) 0;
 }
 
-void RIPEMD160_update(Crypt__RIPEMD160 ripemd160, byte *strptr, dword len)
+void RIPEMD160_update(Crypt__RIPEMD160 ripemd160, const byte *strptr, dword len)
 {
   dword
     i;
