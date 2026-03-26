@@ -82,9 +82,11 @@ Crypt::RIPEMD160 - Perl extension for the RIPEMD-160 Hash function
     
     $context->add(LIST);
     $context->addfile(HANDLE);
-    
+
     $digest = $context->digest();
     $string = $context->hexdigest();
+
+    $copy = $context->clone();
 
     $digest = Crypt::RIPEMD160->hash(SCALAR);
     $string = Crypt::RIPEMD160->hexhash(SCALAR);
@@ -119,6 +121,11 @@ shown in the examples below. The B<hexdigest> operation calls
 B<digest> and returns the result as a printable string of hexdecimal
 digits. This is exactly the same operation as performed by the
 B<unpack> operation in the examples below.
+
+The B<clone> operation creates an independent copy of the current
+context, preserving all accumulated state. This is useful for computing
+digests of data that share a common prefix without re-processing the
+shared portion.
 
 The B<hash> operation can act as either a static member function (ie
 you invoke it on the RIPEMD160 class as in the synopsis above) or as a
