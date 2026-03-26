@@ -58,7 +58,16 @@ rmd160_add(ripemd160, ...)
 
 	    for (i = 1; i < items; i++) {
 		strptr = (byte *) (SvPV(ST(i), len));
-		RIPEMD160_update(ripemd160, strptr, len);
+#if PTRSIZE > 4
+		/* STRLEN is 64-bit on 64-bit systems but RIPEMD160_update
+		   takes a 32-bit dword length; chunk to avoid truncation */
+		while (len > (STRLEN)0xFFFFFFFFU) {
+		    RIPEMD160_update(ripemd160, strptr, (dword)0xFFFFFFFFU);
+		    strptr += 0xFFFFFFFFU;
+		    len -= 0xFFFFFFFFU;
+		}
+#endif
+		RIPEMD160_update(ripemd160, strptr, (dword)len);
 	    }
 	}
 
