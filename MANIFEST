@@ -1,5 +1,6 @@
 Changes
 CHGEUER.asc
+CONTRIBUTING.md
 lib/Crypt/RIPEMD160.pm
 lib/Crypt/RIPEMD160/MAC.pm
 Makefile.PL
