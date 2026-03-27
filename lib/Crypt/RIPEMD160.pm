@@ -257,9 +257,13 @@ C<
   hashcode: 52783243c1697bdbe16d37f97f68f08325dc1528
 >
 
-This copyright does not prohibit distribution of any version of Perl
-containing this extension under the terms of the GNU or Artistic
-licences.
+=head1 LICENSE
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.10.0 or,
+at your option, any later version of Perl you may have available.
+
+See L<https://dev.perl.org/licenses/> for more information.
 
 =head1 AUTHOR
 
