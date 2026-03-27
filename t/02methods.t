@@ -382,6 +382,69 @@ subtest 'MAC single byte key' => sub {
 };
 
 # ========================================
+# clone() tests
+# ========================================
+
+subtest 'clone produces independent copy' => sub {
+    my $ctx = Crypt::RIPEMD160->new;
+    $ctx->add('abc');
+    my $clone = $ctx->clone;
+    isa_ok($clone, 'Crypt::RIPEMD160');
+
+    # Both should produce the same digest
+    my $hex_orig  = unpack("H*", $ctx->digest);
+    my $hex_clone = unpack("H*", $clone->digest);
+    is($hex_orig, $abc_hex, 'original produces correct hash');
+    is($hex_clone, $abc_hex, 'clone produces same hash');
+};
+
+subtest 'clone is independent after diverging' => sub {
+    my $ctx = Crypt::RIPEMD160->new;
+    $ctx->add('abc');
+
+    my $clone = $ctx->clone;
+    $clone->add('def');  # diverge from original
+
+    my $hex_orig = unpack("H*", $ctx->digest);
+    my $hex_clone = unpack("H*", $clone->digest);
+
+    is($hex_orig, $abc_hex, 'original unaffected by clone addition');
+    isnt($hex_clone, $abc_hex, 'clone diverged after additional data');
+
+    # Verify clone matches "abcdef" hash
+    my $expected = Crypt::RIPEMD160->new;
+    $expected->add('abcdef');
+    my $hex_expected = unpack("H*", $expected->digest);
+    is($hex_clone, $hex_expected, 'clone matches "abcdef" hash');
+};
+
+subtest 'clone at block boundary' => sub {
+    my $ctx = Crypt::RIPEMD160->new;
+    $ctx->add('X' x 64);  # exactly one block
+
+    my $clone = $ctx->clone;
+    $ctx->add('Y');
+    $clone->add('Z');
+
+    my $hex1 = unpack("H*", $ctx->digest);
+    my $hex2 = unpack("H*", $clone->digest);
+
+    isnt($hex1, $hex2, 'clone diverges at block boundary');
+};
+
+subtest 'clone of fresh context' => sub {
+    my $ctx = Crypt::RIPEMD160->new;
+    my $clone = $ctx->clone;
+    $clone->add('abc');
+
+    my $hex_orig  = unpack("H*", $ctx->digest);
+    my $hex_clone = unpack("H*", $clone->digest);
+
+    is($hex_orig, $empty_hex, 'original stays empty');
+    is($hex_clone, $abc_hex, 'clone of fresh context works');
+};
+
+# ========================================
 # Version sanity
 # ========================================
 

@@ -47,6 +47,18 @@ reset(ripemd160)
 	    RIPEMD160_init(ripemd160);
 	}
 
+Crypt::RIPEMD160
+rmd160_clone(ripemd160)
+	Crypt::RIPEMD160	ripemd160
+    CODE:
+	{
+	    RETVAL = (Crypt__RIPEMD160) safemalloc(sizeof(RIPEMD160_INFO));
+	    memcpy(RETVAL, ripemd160, sizeof(RIPEMD160_INFO));
+	}
+    OUTPUT:
+	RETVAL
+
+
 void
 rmd160_add(ripemd160, ...)
 	Crypt::RIPEMD160	ripemd160
