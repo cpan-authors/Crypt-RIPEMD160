@@ -10,6 +10,7 @@ misc/rfc2286.txt
 misc/ripemd160_driver.pl
 misc/speedtest.pl
 README
+SECURITY.md
 RIPEMD160.xs
 rmd160.c
 rmd160.h
