@@ -12,6 +12,7 @@ WriteMakefile(
     'AUTHOR'              => 'Christian H. Geuer-Pollmann',
     'VERSION_FROM'  => 'lib/Crypt/RIPEMD160.pm',
     'ABSTRACT_FROM' => 'lib/Crypt/RIPEMD160.pm',
+    'MIN_PERL_VERSION'    => '5.010',
     'PL_FILES'            => {},
     ($ExtUtils::MakeMaker::VERSION >= 6.3002 ? ('LICENSE'        => 'perl', ) : ()),
     PREREQ_PM => {
