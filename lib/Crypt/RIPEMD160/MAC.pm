@@ -37,14 +37,6 @@ sub new {
 sub reset {
     my($self) = @_;
 
-    my $k_ipad = chr(0x36) x 64;
-    my $k_opad = chr(0x5c) x 64;
-    $k_ipad ^= $self->{'key'};
-    $k_opad ^= $self->{'key'};
-
-    $self->{'k_ipad'} = $k_ipad;
-    $self->{'k_opad'} = $k_opad;
-
     $self->{'hash'}->reset();
     $self->{'hash'}->add($self->{'k_ipad'});
 

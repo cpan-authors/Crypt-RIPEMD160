@@ -89,29 +89,16 @@ rmd160_digest(ripemd160)
     CODE:
 	{
 	    unsigned char d_str[20];
+	    int i;
 
 	    RIPEMD160_final(ripemd160);
 
-	    d_str[ 0] = (unsigned char) ((ripemd160->MDbuf[0]      ) & 0xff);
-	    d_str[ 1] = (unsigned char) ((ripemd160->MDbuf[0] >>  8) & 0xff);
-	    d_str[ 2] = (unsigned char) ((ripemd160->MDbuf[0] >> 16) & 0xff);
-	    d_str[ 3] = (unsigned char) ((ripemd160->MDbuf[0] >> 24) & 0xff);
-	    d_str[ 4] = (unsigned char) ((ripemd160->MDbuf[1]      ) & 0xff);
-	    d_str[ 5] = (unsigned char) ((ripemd160->MDbuf[1] >>  8) & 0xff);
-	    d_str[ 6] = (unsigned char) ((ripemd160->MDbuf[1] >> 16) & 0xff);
-	    d_str[ 7] = (unsigned char) ((ripemd160->MDbuf[1] >> 24) & 0xff);
-	    d_str[ 8] = (unsigned char) ((ripemd160->MDbuf[2]      ) & 0xff);
-	    d_str[ 9] = (unsigned char) ((ripemd160->MDbuf[2] >>  8) & 0xff);
-	    d_str[10] = (unsigned char) ((ripemd160->MDbuf[2] >> 16) & 0xff);
-	    d_str[11] = (unsigned char) ((ripemd160->MDbuf[2] >> 24) & 0xff);
-	    d_str[12] = (unsigned char) ((ripemd160->MDbuf[3]      ) & 0xff);
-	    d_str[13] = (unsigned char) ((ripemd160->MDbuf[3] >>  8) & 0xff);
-	    d_str[14] = (unsigned char) ((ripemd160->MDbuf[3] >> 16) & 0xff);
-	    d_str[15] = (unsigned char) ((ripemd160->MDbuf[3] >> 24) & 0xff);
-	    d_str[16] = (unsigned char) ((ripemd160->MDbuf[4]      ) & 0xff);
-	    d_str[17] = (unsigned char) ((ripemd160->MDbuf[4] >>  8) & 0xff);
-	    d_str[18] = (unsigned char) ((ripemd160->MDbuf[4] >> 16) & 0xff);
-	    d_str[19] = (unsigned char) ((ripemd160->MDbuf[4] >> 24) & 0xff);
+	    for (i = 0; i < 5; i++) {
+		d_str[4*i  ] = (unsigned char)(ripemd160->MDbuf[i]       & 0xff);
+		d_str[4*i+1] = (unsigned char)(ripemd160->MDbuf[i] >>  8 & 0xff);
+		d_str[4*i+2] = (unsigned char)(ripemd160->MDbuf[i] >> 16 & 0xff);
+		d_str[4*i+3] = (unsigned char)(ripemd160->MDbuf[i] >> 24 & 0xff);
+	    }
 
 	    ST(0) = sv_2mortal(newSVpv((const char *)d_str, 20));
 	}
