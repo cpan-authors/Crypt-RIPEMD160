@@ -138,13 +138,21 @@ same key, call B<reset> and then B<add> new data.
 
     print("MAC is " . unpack("H*", $digest) . "\n");
 
+=head1 LICENSE
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.10.0 or,
+at your option, any later version of Perl you may have available.
+
+See L<https://dev.perl.org/licenses/> for more information.
+
 =head1 AUTHOR
 
-The RIPEMD-160 interface was written by Christian H. Geuer 
+The RIPEMD-160 interface was written by Christian H. Geuer
 (C<christian.geuer@crypto.gun.de>).
 
 =head1 SEE ALSO
 
-MD5(3pm) and SHA(1).
+L<Crypt::RIPEMD160>
 
 =cut
