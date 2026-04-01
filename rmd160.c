@@ -261,6 +261,9 @@ void MDfinish(dword *MDbuf, const byte *strptr, dword lswlen, dword mswlen)
    X[15] = (lswlen >> 29) | (mswlen << 3);
    rmd160_compress(MDbuf, X);
 
+   /* zero sensitive message data from the stack */
+   memset(X, 0, 16*sizeof(dword));
+
    return;
 }
 
