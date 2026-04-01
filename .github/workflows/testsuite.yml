@@ -19,13 +19,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: perl -V
         run: perl -V
       - name: Install Dependencies
-        uses: perl-actions/install-with-cpm@v1
-        with:
-          cpanfile: "cpanfile"
+        run: curl -fsSL --compressed https://raw.githubusercontent.com/skaji/cpm/main/cpm | perl - install -g --cpanfile cpanfile
       - name: Makefile.PL
         run: perl -I$(pwd) Makefile.PL
       - name: make test
@@ -41,13 +39,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: perl -V
         run: perl -V
       - name: Install Dependencies
-        uses: perl-actions/install-with-cpm@v1
-        with:
-          cpanfile: "cpanfile"
+        run: curl -fsSL --compressed https://raw.githubusercontent.com/skaji/cpm/main/cpm | perl - install -g --cpanfile cpanfile
       - name: Makefile.PL
         run: perl -I$(pwd) Makefile.PL
       - name: make disttest
@@ -61,7 +57,7 @@ jobs:
       perl-versions: ${{ steps.action.outputs.perl-versions }}
     steps:
       - id: action
-        uses: perl-actions/perl-versions@v1
+        uses: perl-actions/perl-versions@v2
         with:
           since-perl: 5.10
           with-devel: true
@@ -86,14 +82,11 @@ jobs:
       image: perldocker/perl-tester:${{ matrix.perl-version }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: perl -V
         run: perl -V
       - name: Install Dependencies
-        uses: perl-actions/install-with-cpm@v1
-        with:
-          sudo: false
-          cpanfile: "cpanfile"
+        run: curl -fsSL --compressed https://raw.githubusercontent.com/skaji/cpm/main/cpm | perl - install -g --cpanfile cpanfile
       - run: perl Makefile.PL
       - run: make
       - run: make test
@@ -109,16 +102,13 @@ jobs:
       RELEASE_TESTING: 1
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Set up Perl
         run: brew install perl
       - name: perl -V
         run: perl -V
       - name: Install Dependencies
-        uses: perl-actions/install-with-cpm@v1
-        with:
-          sudo: false
-          cpanfile: "cpanfile"
+        run: curl -fsSL --compressed https://raw.githubusercontent.com/skaji/cpm/main/cpm | perl - install -g --cpanfile cpanfile
       - run: perl Makefile.PL
       - run: make
       - run: make test
@@ -128,7 +118,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Set up Perl
         run: |
           choco install strawberryperl
@@ -141,10 +131,9 @@ jobs:
       - name: perl -V
         run: perl -V
       - name: Install Dependencies
-        uses: perl-actions/install-with-cpm@v1
-        with:
-          sudo: false
-          cpanfile: "cpanfile"
+        run: |
+          Invoke-WebRequest -Uri https://raw.githubusercontent.com/skaji/cpm/main/cpm -OutFile cpm
+          perl cpm install -g --cpanfile cpanfile
       - name: perl Makefile.PL
         run: perl Makefile.PL
       - name: make
