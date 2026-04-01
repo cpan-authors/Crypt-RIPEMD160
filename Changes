@@ -1,5 +1,34 @@
 Revision history for Perl extension Crypt::RIPEMD160.
 
+0.12 (unreleased)
+
+  Bug fixes:
+    - Fix MAC reset() to work correctly after mac()/hexmac(). Key material
+      is now preserved across digest operations so reset() always
+      reconstructs the correct HMAC state. PR #23
+    - Prevent STRLEN-to-dword truncation for inputs >4GB on 64-bit systems.
+      RIPEMD160_update XS wrapper now chunks data to fit the 32-bit length
+      parameter. PR #26
+
+  Improvements:
+    - Add clone() method for copying mid-computation hash state. Useful
+      for computing digests of data that share a common prefix. PR #27
+    - Add const qualifiers to rmd160_compress(), MDfinish(), and
+      RIPEMD160_update() parameters for data they do not modify. Remove
+      unused stdio.h and stdlib.h includes from rmd160.c. PR #24
+    - Add MIN_PERL_VERSION (5.010) to Makefile.PL. PR #25
+    - Modernize README with current usage examples and installation
+      instructions. Clean up cpanfile. PR #25
+
+  Documentation:
+    - Add LICENSE file and =head1 LICENSE section to RIPEMD160.pm POD.
+      PR #29
+    - Add CONTRIBUTING.md with contribution guidelines. PR #31
+    - Add SECURITY.md with vulnerability reporting contact. PR #32
+
+  Maintenance:
+    - Remove executable permission and shebang from Makefile.PL. PR #28
+
 0.11 2026-03-22
 
   Bug fixes:
