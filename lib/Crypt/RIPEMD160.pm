@@ -97,45 +97,79 @@ The B<Crypt::RIPEMD160> module allows you to use the RIPEMD160
 Message Digest algorithm from within Perl programs.
 
 The module is based on the implementation from Antoon Bosselaers from
-Katholieke Universiteit Leuven. 
+Katholieke Universiteit Leuven.
 
-A new RIPEMD160 context object is created with the B<new> operation.
-Multiple simultaneous digest contexts can be maintained, if desired.
-The context is updated with the B<add> operation which adds the
-strings contained in the I<LIST> parameter. Note, however, that
-C<add('foo', 'bar')>, C<add('foo')> followed by C<add('bar')> and
-C<add('foobar')> should all give the same result.
+=head1 METHODS
 
-The final message digest value is returned by the B<digest> operation
-as a 20-byte binary string. This operation delivers the result of
-B<add> operations since the last B<new> or B<reset> operation. Note
-that the B<digest> operation is effectively a destructive, read-once
-operation. Once it has been performed, the context must be B<reset>
-before being used to calculate another digest value.
+=head2 new
 
-Several convenience functions are also provided. The B<addfile>
-operation takes an open file-handle and reads it until end-of file in
-8192 byte blocks adding the contents to the context. The file-handle
-can either be specified by name or passed as a type-glob reference, as
-shown in the examples below. The B<hexdigest> operation calls
-B<digest> and returns the result as a printable string of hexdecimal
-digits. This is exactly the same operation as performed by the
-B<unpack> operation in the examples below.
+    my $context = Crypt::RIPEMD160->new;
 
-The B<clone> operation creates an independent copy of the current
-context, preserving all accumulated state. This is useful for computing
-digests of data that share a common prefix without re-processing the
-shared portion.
+Creates and returns a new RIPEMD-160 context object. Multiple
+simultaneous digest contexts can be maintained.
 
-The B<hash> operation can act as either a static member function (ie
-you invoke it on the RIPEMD160 class as in the synopsis above) or as a
-normal virtual function. In both cases it performs the complete RIPEMD160
-cycle (reset, add, digest) on the supplied scalar value. This is
-convenient for handling small quantities of data. When invoked on the
-class a temporary context is created. When invoked through an already
-created context object, this context is used. The latter form is
-slightly more efficient. The B<hexhash> operation is analogous to
-B<hexdigest>.
+=head2 reset
+
+    $context->reset();
+
+Reinitializes the context, discarding any accumulated data. Must be
+called after B<digest> before reusing the same context.
+
+=head2 add
+
+    $context->add(LIST);
+
+Appends the strings in I<LIST> to the message. C<add('foo', 'bar')>,
+C<add('foo')> followed by C<add('bar')>, and C<add('foobar')> all
+produce the same result.
+
+=head2 addfile
+
+    $context->addfile(HANDLE);
+
+Reads from the open file-handle in 8192 byte blocks and adds the
+contents to the context. The handle can be a lexical filehandle, a
+type-glob reference, or a bare name.
+
+=head2 digest
+
+    my $digest = $context->digest();
+
+Returns the final message digest as a 20-byte binary string. This is a
+destructive, read-once operation: the context must be B<reset> before
+computing another digest.
+
+=head2 hexdigest
+
+    my $string = $context->hexdigest();
+
+Calls B<digest> and returns the result as a printable string of
+hexadecimal digits in five space-separated groups of eight characters.
+
+=head2 clone
+
+    my $copy = $context->clone();
+
+Creates an independent copy of the current context, preserving all
+accumulated state. Useful for computing digests of data that share a
+common prefix without re-processing the shared portion.
+
+=head2 hash
+
+    my $digest = Crypt::RIPEMD160->hash(SCALAR);
+    my $digest = $context->hash(SCALAR);
+
+Convenience method that performs the complete cycle (reset, add, digest)
+on the supplied scalar. Can be called as a class method (creates a
+temporary context) or on an existing instance (slightly more efficient).
+
+=head2 hexhash
+
+    my $string = Crypt::RIPEMD160->hexhash(SCALAR);
+    my $string = $context->hexhash(SCALAR);
+
+Like B<hash>, but returns the result as a hex string (same format as
+B<hexdigest>).
 
 =head1 EXAMPLES
 
