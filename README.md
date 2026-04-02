@@ -28,45 +28,79 @@ The **Crypt::RIPEMD160** module allows you to use the RIPEMD160
 Message Digest algorithm from within Perl programs.
 
 The module is based on the implementation from Antoon Bosselaers from
-Katholieke Universiteit Leuven. 
+Katholieke Universiteit Leuven.
 
-A new RIPEMD160 context object is created with the **new** operation.
-Multiple simultaneous digest contexts can be maintained, if desired.
-The context is updated with the **add** operation which adds the
-strings contained in the _LIST_ parameter. Note, however, that
-`add('foo', 'bar')`, `add('foo')` followed by `add('bar')` and
-`add('foobar')` should all give the same result.
+# METHODS
 
-The final message digest value is returned by the **digest** operation
-as a 20-byte binary string. This operation delivers the result of
-**add** operations since the last **new** or **reset** operation. Note
-that the **digest** operation is effectively a destructive, read-once
-operation. Once it has been performed, the context must be **reset**
-before being used to calculate another digest value.
+## new
 
-Several convenience functions are also provided. The **addfile**
-operation takes an open file-handle and reads it until end-of file in
-8192 byte blocks adding the contents to the context. The file-handle
-can either be specified by name or passed as a type-glob reference, as
-shown in the examples below. The **hexdigest** operation calls
-**digest** and returns the result as a printable string of hexdecimal
-digits. This is exactly the same operation as performed by the
-**unpack** operation in the examples below.
+    my $context = Crypt::RIPEMD160->new;
 
-The **clone** operation creates an independent copy of the current
-context, preserving all accumulated state. This is useful for computing
-digests of data that share a common prefix without re-processing the
-shared portion.
+Creates and returns a new RIPEMD-160 context object. Multiple
+simultaneous digest contexts can be maintained.
 
-The **hash** operation can act as either a static member function (ie
-you invoke it on the RIPEMD160 class as in the synopsis above) or as a
-normal virtual function. In both cases it performs the complete RIPEMD160
-cycle (reset, add, digest) on the supplied scalar value. This is
-convenient for handling small quantities of data. When invoked on the
-class a temporary context is created. When invoked through an already
-created context object, this context is used. The latter form is
-slightly more efficient. The **hexhash** operation is analogous to
-**hexdigest**.
+## reset
+
+    $context->reset();
+
+Reinitializes the context, discarding any accumulated data. Must be
+called after **digest** before reusing the same context.
+
+## add
+
+    $context->add(LIST);
+
+Appends the strings in _LIST_ to the message. `add('foo', 'bar')`,
+`add('foo')` followed by `add('bar')`, and `add('foobar')` all
+produce the same result.
+
+## addfile
+
+    $context->addfile(HANDLE);
+
+Reads from the open file-handle in 8192 byte blocks and adds the
+contents to the context. The handle can be a lexical filehandle, a
+type-glob reference, or a bare name.
+
+## digest
+
+    my $digest = $context->digest();
+
+Returns the final message digest as a 20-byte binary string. This is a
+destructive, read-once operation: the context must be **reset** before
+computing another digest.
+
+## hexdigest
+
+    my $string = $context->hexdigest();
+
+Calls **digest** and returns the result as a printable string of
+hexadecimal digits in five space-separated groups of eight characters.
+
+## clone
+
+    my $copy = $context->clone();
+
+Creates an independent copy of the current context, preserving all
+accumulated state. Useful for computing digests of data that share a
+common prefix without re-processing the shared portion.
+
+## hash
+
+    my $digest = Crypt::RIPEMD160->hash(SCALAR);
+    my $digest = $context->hash(SCALAR);
+
+Convenience method that performs the complete cycle (reset, add, digest)
+on the supplied scalar. Can be called as a class method (creates a
+temporary context) or on an existing instance (slightly more efficient).
+
+## hexhash
+
+    my $string = Crypt::RIPEMD160->hexhash(SCALAR);
+    my $string = $context->hexhash(SCALAR);
+
+Like **hash**, but returns the result as a hex string (same format as
+**hexdigest**).
 
 # EXAMPLES
 
