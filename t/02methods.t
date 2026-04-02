@@ -445,6 +445,39 @@ subtest 'clone of fresh context' => sub {
 };
 
 # ========================================
+# addfile() read error handling
+# ========================================
+
+subtest 'addfile croaks on read error' => sub {
+    # Tied handle that simulates a read() failure (returns undef, sets $!)
+    {
+        package ReadErrorHandle;
+        sub TIEHANDLE { bless {}, shift }
+        sub READ { $! = 5; return undef }  # EIO
+    }
+    tie *ERR_FH, 'ReadErrorHandle';
+
+    my $ctx = Crypt::RIPEMD160->new;
+    eval { $ctx->addfile(\*ERR_FH) };
+    like($@, qr/read failed/i, 'RIPEMD160 addfile croaks on read error');
+    untie *ERR_FH;
+};
+
+subtest 'MAC addfile croaks on read error' => sub {
+    {
+        package ReadErrorHandle2;
+        sub TIEHANDLE { bless {}, shift }
+        sub READ { $! = 5; return undef }
+    }
+    tie *ERR_FH2, 'ReadErrorHandle2';
+
+    my $mac = Crypt::RIPEMD160::MAC->new("key");
+    eval { $mac->addfile(\*ERR_FH2) };
+    like($@, qr/read failed/i, 'MAC addfile croaks on read error');
+    untie *ERR_FH2;
+};
+
+# ========================================
 # Version sanity
 # ========================================
 

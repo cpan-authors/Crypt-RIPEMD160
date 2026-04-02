@@ -4,6 +4,7 @@ use Crypt::RIPEMD160 0.03;
 
 use strict;
 use warnings;
+use Carp;
 
 our $VERSION = '0.11';
 
@@ -67,9 +68,11 @@ sub addfile
     if (!ref($handle)) {
 	$handle = $package . "::" . $handle unless ($handle =~ /(\:\:|\')/);
     }
-    while (read($handle, $data, 8192)) {
+    my $n;
+    while ($n = read($handle, $data, 8192)) {
 	$self->{'hash'}->add($data);
     }
+    croak "addfile read failed: $!" unless defined $n;
 }
 
 sub mac {

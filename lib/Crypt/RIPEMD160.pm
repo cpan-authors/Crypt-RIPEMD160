@@ -23,9 +23,11 @@ sub addfile
     if (!ref($handle)) {
 	$handle = $package . "::" . $handle unless ($handle =~ /(\:\:|\')/);
     }
-    while (read($handle, $data, 8192)) {
+    my $n;
+    while ($n = read($handle, $data, 8192)) {
 	$self->add($data);
     }
+    croak "addfile read failed: $!" unless defined $n;
 }
 
 sub hexdigest
