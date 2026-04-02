@@ -478,6 +478,64 @@ subtest 'MAC addfile croaks on read error' => sub {
 };
 
 # ========================================
+# Padding boundary tests (55/56/57 bytes)
+# ========================================
+# RIPEMD-160 padding appends 0x80 + 64-bit length (9 bytes minimum).
+# If (message_length mod 64) > 55, padding overflows into a second
+# compression block.  These tests exercise both sides of that boundary.
+
+subtest 'padding boundary: 55 bytes (fits in one block)' => sub {
+    my $ctx = Crypt::RIPEMD160->new;
+    $ctx->add('A' x 55);
+    is(unpack("H*", $ctx->digest),
+       'c4cf09138ab0b859b70c321375557430649190b4',
+       '55 bytes: padding fits in one block');
+};
+
+subtest 'padding boundary: 56 bytes (spills to second block)' => sub {
+    my $ctx = Crypt::RIPEMD160->new;
+    $ctx->add('A' x 56);
+    is(unpack("H*", $ctx->digest),
+       '6da64c99dd269139248fa73adfb40e19b8722196',
+       '56 bytes: padding requires second compression block');
+};
+
+subtest 'padding boundary: 57 bytes' => sub {
+    my $ctx = Crypt::RIPEMD160->new;
+    $ctx->add('A' x 57);
+    is(unpack("H*", $ctx->digest),
+       '017d4d1b03c32d833b31df97148b43c0130bd295',
+       '57 bytes: one past the padding boundary');
+};
+
+# Same boundary at 119/120 bytes (second block pair)
+subtest 'padding boundary: 119 bytes (55 mod 64, fits in block)' => sub {
+    my $ctx = Crypt::RIPEMD160->new;
+    $ctx->add('A' x 119);
+    is(unpack("H*", $ctx->digest),
+       'a0dcfad464c8cee6ea3137a640a90498e80db360',
+       '119 bytes: multi-block, padding fits');
+};
+
+subtest 'padding boundary: 120 bytes (56 mod 64, spills)' => sub {
+    my $ctx = Crypt::RIPEMD160->new;
+    $ctx->add('A' x 120);
+    is(unpack("H*", $ctx->digest),
+       '2c62c467efc39f9c6b73394ef63abf3c89aa0f96',
+       '120 bytes: multi-block, padding spills');
+};
+
+subtest 'padding boundary: incremental add across boundary' => sub {
+    # Feed 56 bytes one at a time — exercises the partial-block
+    # accumulation path in RIPEMD160_update plus the padding overflow
+    my $ctx = Crypt::RIPEMD160->new;
+    $ctx->add('A') for 1..56;
+    is(unpack("H*", $ctx->digest),
+       '6da64c99dd269139248fa73adfb40e19b8722196',
+       '56 bytes fed incrementally matches single-add vector');
+};
+
+# ========================================
 # Version sanity
 # ========================================
 
