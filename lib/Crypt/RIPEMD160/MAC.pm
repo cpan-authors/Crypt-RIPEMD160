@@ -4,6 +4,7 @@ use Crypt::RIPEMD160 0.03;
 
 use strict;
 use warnings;
+use Carp;
 
 our $VERSION = '0.11';
 
@@ -37,14 +38,6 @@ sub new {
 sub reset {
     my($self) = @_;
 
-    my $k_ipad = chr(0x36) x 64;
-    my $k_opad = chr(0x5c) x 64;
-    $k_ipad ^= $self->{'key'};
-    $k_opad ^= $self->{'key'};
-
-    $self->{'k_ipad'} = $k_ipad;
-    $self->{'k_opad'} = $k_opad;
-
     $self->{'hash'}->reset();
     $self->{'hash'}->add($self->{'k_ipad'});
 
@@ -67,9 +60,11 @@ sub addfile
     if (!ref($handle)) {
 	$handle = $package . "::" . $handle unless ($handle =~ /(\:\:|\')/);
     }
-    while (read($handle, $data, 8192)) {
+    my $n;
+    while ($n = read($handle, $data, 8192)) {
 	$self->{'hash'}->add($data);
     }
+    croak "addfile read failed: $!" unless defined $n;
 }
 
 sub mac {
