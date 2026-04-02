@@ -1,3 +1,5 @@
+[![testsuite](https://github.com/cpan-authors/Crypt-RIPEMD160/actions/workflows/testsuite.yml/badge.svg)](https://github.com/cpan-authors/Crypt-RIPEMD160/actions/workflows/testsuite.yml)
+
 # NAME
 
 Crypt::RIPEMD160 - Perl extension for the RIPEMD-160 Hash function

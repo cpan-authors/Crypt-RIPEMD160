@@ -69,6 +69,8 @@ sub hexhash
 __END__
 # Below is the stub of documentation for your module. You better edit it!
 
+=for markdown [![testsuite](https://github.com/cpan-authors/Crypt-RIPEMD160/actions/workflows/testsuite.yml/badge.svg)](https://github.com/cpan-authors/Crypt-RIPEMD160/actions/workflows/testsuite.yml)
+
 =head1 NAME
 
 Crypt::RIPEMD160 - Perl extension for the RIPEMD-160 Hash function
