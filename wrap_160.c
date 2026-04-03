@@ -51,6 +51,8 @@ void RIPEMD160_update(Crypt__RIPEMD160 ripemd160, const byte *strptr, dword len)
     len -= RIPEMD160_BLOCKSIZE;
     rmd160_compress(ripemd160->MDbuf, ripemd160->X);
   }
+  /* Zero scratch buffer so message words don't linger in the struct */
+  memset(ripemd160->X, 0, sizeof(ripemd160->X));
   memcpy(ripemd160->data, strptr, len);
   ripemd160->local = len;
 }
@@ -61,4 +63,12 @@ void RIPEMD160_final(Crypt__RIPEMD160 ripemd160)
 	   ripemd160->data,
 	   (dword) ripemd160->count_lo,
 	   (dword) ripemd160->count_hi);
+
+  /* Zero working buffers after finalization.  MDbuf retains the
+     digest for the caller; everything else is sensitive. */
+  memset(ripemd160->data, 0, sizeof(ripemd160->data));
+  memset(ripemd160->X, 0, sizeof(ripemd160->X));
+  ripemd160->count_lo = 0;
+  ripemd160->count_hi = 0;
+  ripemd160->local = 0;
 }
