@@ -113,15 +113,53 @@ The B<Crypt::RIPEMD160::MAC> module implements HMAC-RIPEMD-160 message
 authentication codes as described in RFC 2104. It uses
 L<Crypt::RIPEMD160> as the underlying hash function.
 
-A new MAC context is created with B<new>, passing the secret key as
-argument. Data is fed into the context with B<add> (which accepts a
-list of strings) or B<addfile> (which reads from a file handle).
-The final MAC value is returned by B<mac> as a 20-byte binary string,
-or by B<hexmac> as a human-readable hex string.
+=head1 METHODS
 
-Note that both B<mac> and B<hexmac> are destructive, read-once
-operations on the accumulated data. To compute another MAC with the
-same key, call B<reset> and then B<add> new data.
+=head2 new
+
+    my $mac = Crypt::RIPEMD160::MAC->new($key);
+
+Creates and returns a new HMAC-RIPEMD-160 context keyed with C<$key>.
+Keys longer than 64 bytes are hashed with RIPEMD-160 before use, as
+specified by RFC 2104.
+
+=head2 reset
+
+    $mac->reset();
+
+Reinitializes the context for a new computation while retaining the
+original key. Must be called after B<mac> or B<hexmac> before reusing
+the same context.
+
+=head2 add
+
+    $mac->add(LIST);
+
+Appends the strings in I<LIST> to the message. Multiple calls are
+equivalent to a single call with the concatenation of all arguments.
+
+=head2 addfile
+
+    $mac->addfile(HANDLE);
+
+Reads from the open file-handle in 8192 byte blocks and adds the
+contents to the context. The handle can be a lexical filehandle, a
+type-glob reference, or a bare name.
+
+=head2 mac
+
+    my $digest = $mac->mac();
+
+Returns the final MAC value as a 20-byte binary string. This is a
+destructive, read-once operation: call B<reset> before computing
+another MAC with the same key.
+
+=head2 hexmac
+
+    my $string = $mac->hexmac();
+
+Like B<mac>, but returns the result as a printable string of
+hexadecimal digits in five space-separated groups of eight characters.
 
 =head1 EXAMPLES
 
