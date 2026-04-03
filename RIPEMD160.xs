@@ -23,6 +23,7 @@ rmd160_new(packname = "Crypt::RIPEMD160")
 	char *		packname
     CODE:
 	{
+	    PERL_UNUSED_VAR(packname);
 	    RETVAL = (Crypt__RIPEMD160) safemalloc(sizeof(RIPEMD160_INFO));
 	    RIPEMD160_init(RETVAL);
 	}
@@ -101,5 +102,7 @@ rmd160_digest(ripemd160)
 		d_str[4*i+3] = (unsigned char)(ripemd160->MDbuf[i] >> 24 & 0xff);
 	    }
 
-	    ST(0) = sv_2mortal(newSVpv((const char *)d_str, 20));
+	    RETVAL = newSVpvn((const char *)d_str, 20);
 	}
+    OUTPUT:
+	RETVAL
