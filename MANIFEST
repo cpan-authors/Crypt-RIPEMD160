@@ -31,6 +31,7 @@ rmd160/mac/rmd160mc.h
 SECURITY.md
 t/01test.t
 t/02methods.t
+t/03streaming.t
 t/pod-coverage.t
 t/pod.t
 typemap
