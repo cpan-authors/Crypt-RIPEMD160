@@ -15,7 +15,6 @@
 
 typedef struct {
   dword MDbuf[RMDsize/32];       /* contains (A, B, C, D, E)   */
-  dword X[RIPEMD160_BLOCKSIZE/4]; /* current 16-word chunk      */
   dword count_lo, count_hi;      /* 64-bit byte count          */
   byte data[RIPEMD160_BLOCKSIZE]; /* unprocessed data */
   dword local;                   /* amount of unprocessed data */
