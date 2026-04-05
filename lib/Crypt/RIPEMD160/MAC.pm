@@ -48,6 +48,8 @@ sub add {
     my($self, @data) = @_;
 
     $self->{'hash'}->add(@data);
+
+    return $self;
 }
 
 sub addfile
@@ -62,7 +64,7 @@ sub addfile
     }
     my $n;
     while ($n = read($handle, $data, 8192)) {
-	$self->{'hash'}->add($data);
+	$self->add($data);
     }
     croak "addfile read failed: $!" unless defined $n;
 }
