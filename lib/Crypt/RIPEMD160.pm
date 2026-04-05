@@ -31,6 +31,7 @@ sub addfile
 	$self->add($data);
     }
     croak "addfile read failed: $!" unless defined $n;
+    return $self;
 }
 
 sub hexdigest
