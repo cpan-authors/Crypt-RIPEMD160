@@ -117,7 +117,10 @@ simultaneous digest contexts can be maintained.
     $context->reset();
 
 Reinitializes the context, discarding any accumulated data. Must be
-called after B<digest> before reusing the same context.
+called after B<digest> before reusing the same context.  Returns
+the context, so calls can be chained:
+
+    $context->reset->add($data);
 
 =head2 add
 
@@ -125,7 +128,9 @@ called after B<digest> before reusing the same context.
 
 Appends the strings in I<LIST> to the message. C<add('foo', 'bar')>,
 C<add('foo')> followed by C<add('bar')>, and C<add('foobar')> all
-produce the same result.
+produce the same result.  Returns the context for method chaining:
+
+    $context->add('foo')->add('bar');
 
 =head2 addfile
 

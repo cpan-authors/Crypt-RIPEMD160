@@ -536,6 +536,58 @@ subtest 'padding boundary: incremental add across boundary' => sub {
 };
 
 # ========================================
+# Method chaining
+# ========================================
+
+subtest 'add returns self for chaining' => sub {
+    my $ctx = Crypt::RIPEMD160->new;
+    my $ret = $ctx->add('abc');
+    is($ret, $ctx, 'add() returns the context object');
+};
+
+subtest 'reset returns self for chaining' => sub {
+    my $ctx = Crypt::RIPEMD160->new;
+    $ctx->add('junk');
+    my $ret = $ctx->reset;
+    is($ret, $ctx, 'reset() returns the context object');
+};
+
+subtest 'chained add produces correct hash' => sub {
+    my $ctx = Crypt::RIPEMD160->new;
+    $ctx->add('a')->add('b')->add('c');
+    is(unpack("H*", $ctx->digest), $abc_hex, 'chained add("a")->add("b")->add("c") works');
+};
+
+subtest 'chained reset then add' => sub {
+    my $ctx = Crypt::RIPEMD160->new;
+    $ctx->add('junk');
+    $ctx->digest;
+    $ctx->reset->add('abc');
+    is(unpack("H*", $ctx->digest), $abc_hex, 'reset->add chain works');
+};
+
+subtest 'MAC add returns self for chaining' => sub {
+    my $mac = Crypt::RIPEMD160::MAC->new('key');
+    my $ret = $mac->add('data');
+    is($ret, $mac, 'MAC add() returns the MAC object');
+};
+
+subtest 'MAC chained add produces correct result' => sub {
+    my $key = chr(0xaa) x 80;
+    my $mac1 = Crypt::RIPEMD160::MAC->new($key);
+    $mac1->add("Test Using Larger Than Block-Size Key - Hash Key First");
+    my $hex1 = $mac1->hexmac;
+
+    my $mac2 = Crypt::RIPEMD160::MAC->new($key);
+    $mac2->add("Test Using Lar")->add("ger Than Block-Size K")->add("ey - Hash Key First");
+    my $hex2 = $mac2->hexmac;
+
+    is($hex1, $hex2, 'chained MAC add matches single add');
+    is($hex1, '6466ca07 ac5eac29 e1bd523e 5ada7605 b791fd8b',
+       'chained MAC add matches RFC 2286 vector');
+};
+
+# ========================================
 # Version sanity
 # ========================================
 
