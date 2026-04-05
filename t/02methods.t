@@ -536,6 +536,58 @@ subtest 'padding boundary: incremental add across boundary' => sub {
 };
 
 # ========================================
+# Method return values ($self for chaining)
+# ========================================
+
+subtest 'addfile returns $self for chaining' => sub {
+    my ($fh, $filename) = tempfile(UNLINK => 1);
+    print $fh 'abc';
+    close $fh;
+
+    open my $rfh, '<', $filename or die "Cannot open $filename: $!";
+    my $ctx = Crypt::RIPEMD160->new;
+    my $ret = $ctx->addfile($rfh);
+    close $rfh;
+
+    is($ret, $ctx, 'addfile returns the context object');
+};
+
+subtest 'MAC add returns $self for chaining' => sub {
+    my $mac = Crypt::RIPEMD160::MAC->new('secret');
+    my $ret = $mac->add('data');
+    is($ret, $mac, 'MAC add returns the MAC object');
+};
+
+subtest 'MAC add chaining produces correct result' => sub {
+    my $key = "Jefe";
+    my $mac1 = Crypt::RIPEMD160::MAC->new($key);
+    $mac1->add("what do ya ");
+    $mac1->add("want for nothing?");
+    my $hex1 = $mac1->hexmac;
+
+    my $mac2 = Crypt::RIPEMD160::MAC->new($key);
+    $mac2->add("what do ya ")->add("want for nothing?");
+    my $hex2 = $mac2->hexmac;
+
+    is($hex1, $hex2, 'chained MAC add produces same result as sequential');
+    is($hex1, 'dda6c021 3a485a9e 24f47420 64a7f033 b43c4069',
+       'chained result matches RFC 2286 vector');
+};
+
+subtest 'MAC addfile returns $self for chaining' => sub {
+    my ($fh, $filename) = tempfile(UNLINK => 1);
+    print $fh 'data';
+    close $fh;
+
+    open my $rfh, '<', $filename or die "Cannot open $filename: $!";
+    my $mac = Crypt::RIPEMD160::MAC->new('key');
+    my $ret = $mac->addfile($rfh);
+    close $rfh;
+
+    is($ret, $mac, 'MAC addfile returns the MAC object');
+};
+
+# ========================================
 # Version sanity
 # ========================================
 

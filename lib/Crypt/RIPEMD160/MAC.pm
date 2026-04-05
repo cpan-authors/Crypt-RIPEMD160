@@ -48,6 +48,7 @@ sub add {
     my($self, @data) = @_;
 
     $self->{'hash'}->add(@data);
+    return $self;
 }
 
 sub addfile
@@ -65,6 +66,7 @@ sub addfile
 	$self->{'hash'}->add($data);
     }
     croak "addfile read failed: $!" unless defined $n;
+    return $self;
 }
 
 sub mac {
