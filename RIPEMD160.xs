@@ -44,9 +44,11 @@ rmd160_DESTROY(ripemd160)
 void
 reset(ripemd160)
 	Crypt::RIPEMD160	ripemd160
-    CODE:
+    PPCODE:
 	{
 	    RIPEMD160_init(ripemd160);
+	    /* return self for method chaining */
+	    XSRETURN(1);
 	}
 
 Crypt::RIPEMD160
@@ -64,7 +66,7 @@ rmd160_clone(ripemd160)
 void
 rmd160_add(ripemd160, ...)
 	Crypt::RIPEMD160	ripemd160
-    CODE:
+    PPCODE:
 	{
 	    STRLEN len;
 	    byte *strptr;
@@ -83,6 +85,8 @@ rmd160_add(ripemd160, ...)
 #endif
 		RIPEMD160_update(ripemd160, strptr, (dword)len);
 	    }
+	    /* return self for method chaining */
+	    XSRETURN(1);
 	}
 
 SV *

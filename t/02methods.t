@@ -541,6 +541,33 @@ subtest 'padding boundary: incremental add across boundary' => sub {
 # Method return values ($self for chaining)
 # ========================================
 
+subtest 'add returns self for chaining' => sub {
+    my $ctx = Crypt::RIPEMD160->new;
+    my $ret = $ctx->add('abc');
+    is($ret, $ctx, 'add() returns the context object');
+};
+
+subtest 'reset returns self for chaining' => sub {
+    my $ctx = Crypt::RIPEMD160->new;
+    $ctx->add('junk');
+    my $ret = $ctx->reset;
+    is($ret, $ctx, 'reset() returns the context object');
+};
+
+subtest 'chained add produces correct hash' => sub {
+    my $ctx = Crypt::RIPEMD160->new;
+    $ctx->add('a')->add('b')->add('c');
+    is(unpack("H*", $ctx->digest), $abc_hex, 'chained add("a")->add("b")->add("c") works');
+};
+
+subtest 'chained reset then add' => sub {
+    my $ctx = Crypt::RIPEMD160->new;
+    $ctx->add('junk');
+    $ctx->digest;
+    $ctx->reset->add('abc');
+    is(unpack("H*", $ctx->digest), $abc_hex, 'reset->add chain works');
+};
+
 subtest 'addfile returns $self for chaining' => sub {
     my ($fh, $filename) = tempfile(UNLINK => 1);
     print $fh 'abc';
