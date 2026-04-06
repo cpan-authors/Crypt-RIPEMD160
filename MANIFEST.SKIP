@@ -6,8 +6,10 @@
 \.o$
 ^blib/
 ^Makefile$
+^Makefile\.old$
 ^MANIFEST.bak$
 ^MYMETA\.
 ^pm_to_blib$
+^pod2htmd\.tmp$
 \.perltidyrc$
 ^CLAUDE.md$
