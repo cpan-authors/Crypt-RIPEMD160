@@ -54,6 +54,7 @@ sub addfile
 {
     my ($self, $handle) = @_;
 
+    binmode($handle);
     $self->{'hash'}->addfile($handle);
 
     return $self;
