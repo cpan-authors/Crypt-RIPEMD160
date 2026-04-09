@@ -1,13 +1,10 @@
-^\.git
+#!include_default
+
+# Project-specific exclusions
 ^\.claude/
 ^cpanfile$
 \.bs$
 ^RIPEMD160\.c$
 \.o$
-^blib/
-^Makefile$
-^MANIFEST.bak$
-^MYMETA\.
-^pm_to_blib$
 \.perltidyrc$
 ^CLAUDE.md$
