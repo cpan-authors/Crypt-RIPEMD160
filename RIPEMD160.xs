@@ -4,10 +4,11 @@ Perl Extension for the RIPEMD160 Message-Digest Algorithm
 This module by Christian H. Geuer <christian.geuer@crypto.gun.de>
 following example of MD5 module and SHA module.
 
-This extension (wrapper code and perl-stuff) may be distributed 
-under the same terms as Perl. 
+This extension (wrapper code and perl-stuff) may be distributed
+under the same terms as Perl.
 */
 
+#define PERL_NO_GET_CONTEXT
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
