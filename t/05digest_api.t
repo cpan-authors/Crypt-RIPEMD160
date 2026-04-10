@@ -42,6 +42,8 @@ subtest 'b64digest' => sub {
 
 subtest 'base64_padded_digest' => sub {
     my $ctx = Crypt::RIPEMD160->new;
+    plan skip_all => 'base64_padded_digest not available in this Digest::base'
+        unless $ctx->can('base64_padded_digest');
     $ctx->add('abc');
     my $b64 = $ctx->base64_padded_digest;
     ok(defined $b64, 'base64_padded_digest returns a value');
@@ -60,6 +62,8 @@ subtest 'add_bits with bit string' => sub {
     my $bits = '011000010110001001100011';
 
     my $ctx = Crypt::RIPEMD160->new;
+    plan skip_all => 'add_bits not available in this Digest::base'
+        unless $ctx->can('add_bits');
     $ctx->add_bits($bits);
     my $hex = unpack("H*", $ctx->digest);
     is($hex, $abc_hex, 'add_bits with binary string matches add("abc")');
@@ -67,6 +71,8 @@ subtest 'add_bits with bit string' => sub {
 
 subtest 'add_bits with raw bytes and count' => sub {
     my $ctx = Crypt::RIPEMD160->new;
+    plan skip_all => 'add_bits not available in this Digest::base'
+        unless $ctx->can('add_bits');
     $ctx->add_bits("abc", 24);  # 3 bytes = 24 bits
     my $hex = unpack("H*", $ctx->digest);
     is($hex, $abc_hex, 'add_bits with bytes+count matches add("abc")');
@@ -74,6 +80,8 @@ subtest 'add_bits with raw bytes and count' => sub {
 
 subtest 'add_bits rejects non-byte-aligned' => sub {
     my $ctx = Crypt::RIPEMD160->new;
+    plan skip_all => 'add_bits not available in this Digest::base'
+        unless $ctx->can('add_bits');
     eval { $ctx->add_bits('01100001011', 11) };
     like($@, qr/multiple of 8/i, 'add_bits croaks on non-byte-aligned input');
 };
