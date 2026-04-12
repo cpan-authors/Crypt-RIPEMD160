@@ -52,19 +52,11 @@ sub add {
 
 sub addfile
 {
-    no strict 'refs';
     my ($self, $handle) = @_;
-    my ($package, $file, $line) = caller;
-    my ($data);
 
-    if (!ref($handle)) {
-	$handle = $package . "::" . $handle unless ($handle =~ /(\:\:|\')/);
-    }
-    my $n;
-    while ($n = read($handle, $data, 8192)) {
-	$self->{'hash'}->add($data);
-    }
-    croak "addfile read failed: $!" unless defined $n;
+    $self->{'hash'}->addfile($handle);
+
+    return $self;
 }
 
 sub mac {
