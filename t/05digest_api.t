@@ -94,7 +94,8 @@ subtest 'Digest->new("RIPEMD-160")' => sub {
     eval { require Digest };
     plan skip_all => 'Digest module not available' if $@;
 
-    my $ctx = Digest->new('RIPEMD-160');
+    my $ctx = eval { Digest->new('RIPEMD-160') };
+    plan skip_all => "Digest->new('RIPEMD-160') not supported: $@" if $@;
     isa_ok($ctx, 'Crypt::RIPEMD160');
     $ctx->add('abc');
     my $hex = unpack("H*", $ctx->digest);
@@ -105,7 +106,8 @@ subtest 'Digest->new("RIPEMD-160") has b64digest' => sub {
     eval { require Digest };
     plan skip_all => 'Digest module not available' if $@;
 
-    my $ctx = Digest->new('RIPEMD-160');
+    my $ctx = eval { Digest->new('RIPEMD-160') };
+    plan skip_all => "Digest->new('RIPEMD-160') not supported: $@" if $@;
     $ctx->add('abc');
     my $b64 = $ctx->b64digest;
     ok(defined $b64, 'b64digest available via Digest->new');
