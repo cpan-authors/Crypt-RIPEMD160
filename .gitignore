@@ -54,4 +54,4 @@ Build.bat
 
 #Local
 /Crypt-RIPEMD160-*/
-*.c
+/RIPEMD160.c
