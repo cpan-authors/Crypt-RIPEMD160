@@ -265,8 +265,8 @@ subtest 'MAC reset and reuse' => sub {
 };
 
 subtest 'MAC reset after mac() preserves key' => sub {
-    # mac() and hexmac() zero the key material, but reset() must still
-    # reconstruct the correct HMAC state from the original key.
+    # mac() and hexmac() finalize the inner hash, but reset() must still
+    # reconstruct the correct HMAC state from the preserved key.
     my $key = "secret key";
     my $data = "test data";
 
@@ -542,6 +542,28 @@ subtest 'padding boundary: incremental add across boundary' => sub {
 subtest 'module version defined' => sub {
     ok(defined $Crypt::RIPEMD160::VERSION, 'Crypt::RIPEMD160 has VERSION');
     ok(defined $Crypt::RIPEMD160::MAC::VERSION, 'Crypt::RIPEMD160::MAC has VERSION');
+};
+
+# ========================================
+# MAC DESTROY zeroes key material
+# ========================================
+
+subtest 'MAC DESTROY zeroes key material' => sub {
+    my $key = "super secret key";
+    my $mac = Crypt::RIPEMD160::MAC->new($key);
+    $mac->add("data");
+
+    # Grab refs to the internal scalars before DESTROY
+    my $key_ref   = \$mac->{'key'};
+    my $ipad_ref  = \$mac->{'k_ipad'};
+    my $opad_ref  = \$mac->{'k_opad'};
+
+    # Explicitly destroy
+    $mac->DESTROY;
+
+    is($$key_ref, '', 'key zeroed after DESTROY');
+    is($$ipad_ref, '', 'k_ipad zeroed after DESTROY');
+    is($$opad_ref, '', 'k_opad zeroed after DESTROY');
 };
 
 done_testing;
