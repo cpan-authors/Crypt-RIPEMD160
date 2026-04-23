@@ -48,6 +48,7 @@ sub add {
     my($self, @data) = @_;
 
     $self->{'hash'}->add(@data);
+    return $self;
 }
 
 sub addfile
