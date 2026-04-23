@@ -36,7 +36,7 @@ rmd160_DESTROY(ripemd160)
 	Crypt::RIPEMD160	ripemd160
     CODE:
 	{
-	    memset(ripemd160, 0, sizeof(RIPEMD160_INFO));
+	    secure_memzero(ripemd160, sizeof(RIPEMD160_INFO));
 	    safefree((char *) ripemd160);
 	}
 

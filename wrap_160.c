@@ -3,6 +3,19 @@
 #include "rmd160.h"
 #include "wrap_160.h"
 
+/*
+ * Indirect memset via a volatile function pointer.  The compiler
+ * cannot prove that the pointer still equals memset at call time,
+ * so it must emit the call even when the target memory is about to
+ * go out of scope or be freed.
+ */
+static void *(* const volatile memset_ptr)(void *, int, size_t) = memset;
+
+void secure_memzero(void *ptr, size_t len)
+{
+    (memset_ptr)(ptr, 0, len);
+}
+
 void RIPEMD160_init(Crypt__RIPEMD160 ripemd160)
 {
   memset(ripemd160, 0, sizeof(RIPEMD160_INFO));
