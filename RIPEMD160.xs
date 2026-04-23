@@ -4,10 +4,11 @@ Perl Extension for the RIPEMD160 Message-Digest Algorithm
 This module by Christian H. Geuer <christian.geuer@crypto.gun.de>
 following example of MD5 module and SHA module.
 
-This extension (wrapper code and perl-stuff) may be distributed 
-under the same terms as Perl. 
+This extension (wrapper code and perl-stuff) may be distributed
+under the same terms as Perl.
 */
 
+#define PERL_NO_GET_CONTEXT
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
@@ -70,7 +71,7 @@ rmd160_add(ripemd160, ...)
 	    int i;
 
 	    for (i = 1; i < items; i++) {
-		strptr = (byte *) (SvPV(ST(i), len));
+		strptr = (byte *) (SvPVbyte(ST(i), len));
 #if PTRSIZE > 4
 		/* STRLEN is 64-bit on 64-bit systems but RIPEMD160_update
 		   takes a 32-bit dword length; chunk to avoid truncation */

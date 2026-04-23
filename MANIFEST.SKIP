@@ -1,15 +1,11 @@
-^\.git
+#!include_default
+
+# Project-specific exclusions
 ^\.claude/
 ^cpanfile$
 \.bs$
 ^RIPEMD160\.c$
 \.o$
-^blib/
-^Makefile$
-^Makefile\.old$
-^MANIFEST.bak$
-^MYMETA\.
-^pm_to_blib$
-^pod2htmd\.tmp$
 \.perltidyrc$
 ^CLAUDE.md$
+^pod2htmd\.tmp$

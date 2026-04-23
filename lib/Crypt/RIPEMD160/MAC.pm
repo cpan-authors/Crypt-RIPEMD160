@@ -52,19 +52,26 @@ sub add {
 
 sub addfile
 {
-    no strict 'refs';
     my ($self, $handle) = @_;
-    my ($package, $file, $line) = caller;
-    my ($data);
 
-    if (!ref($handle)) {
-	$handle = $package . "::" . $handle unless ($handle =~ /(\:\:|\')/);
+    $self->{'hash'}->addfile($handle);
+
+    return $self;
+}
+
+sub DESTROY {
+    my($self) = @_;
+
+    # Best-effort zeroing of key material in Perl scalars.
+    # Not as reliable as C-level secure_memzero (Perl may keep
+    # copies via COW or realloc), but better than leaving keys
+    # in memory until GC reclaims the storage.
+    for my $field (qw(key k_ipad k_opad)) {
+        if (defined $self->{$field}) {
+            $self->{$field} = "\x00" x length($self->{$field});
+            $self->{$field} = '';
+        }
     }
-    my $n;
-    while ($n = read($handle, $data, 8192)) {
-	$self->{'hash'}->add($data);
-    }
-    croak "addfile read failed: $!" unless defined $n;
 }
 
 sub mac {
