@@ -25,6 +25,7 @@ sub addfile
     if (!ref($handle)) {
 	$handle = $package . "::" . $handle unless ($handle =~ /(\:\:|\')/);
     }
+    binmode($handle);
     my $n;
     while ($n = read($handle, $data, 8192)) {
 	$self->add($data);
@@ -144,7 +145,8 @@ produce the same result.
 
 Reads from the open file-handle in 8192 byte blocks and adds the
 contents to the context. The handle can be a lexical filehandle, a
-type-glob reference, or a bare name.
+type-glob reference, or a bare name. The handle is set to binary mode
+via C<binmode> to prevent CRLF translation on Windows.
 
 =head2 digest
 

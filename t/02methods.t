@@ -453,6 +453,7 @@ subtest 'addfile croaks on read error' => sub {
     {
         package ReadErrorHandle;
         sub TIEHANDLE { bless {}, shift }
+        sub BINMODE { 1 }
         sub READ { $! = 5; return undef }  # EIO
     }
     tie *ERR_FH, 'ReadErrorHandle';
@@ -467,6 +468,7 @@ subtest 'MAC addfile croaks on read error' => sub {
     {
         package ReadErrorHandle2;
         sub TIEHANDLE { bless {}, shift }
+        sub BINMODE { 1 }
         sub READ { $! = 5; return undef }
     }
     tie *ERR_FH2, 'ReadErrorHandle2';
