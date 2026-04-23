@@ -26,6 +26,7 @@ jobs:
         uses: perl-actions/install-with-cpm@v1
         with:
           cpanfile: "cpanfile"
+          args: "--with-develop"
       - name: Makefile.PL
         run: perl -I$(pwd) Makefile.PL
       - name: make test
@@ -48,6 +49,7 @@ jobs:
         uses: perl-actions/install-with-cpm@v1
         with:
           cpanfile: "cpanfile"
+          args: "--with-develop"
       - name: Makefile.PL
         run: perl -I$(pwd) Makefile.PL
       - name: make disttest
@@ -94,6 +96,7 @@ jobs:
         with:
           sudo: false
           cpanfile: "cpanfile"
+          args: "--with-develop"
       - run: perl Makefile.PL
       - run: make
       - run: make test
@@ -119,6 +122,7 @@ jobs:
         with:
           sudo: false
           cpanfile: "cpanfile"
+          args: "--with-develop"
       - run: perl Makefile.PL
       - run: make
       - run: make test
@@ -145,6 +149,7 @@ jobs:
         with:
           sudo: false
           cpanfile: "cpanfile"
+          args: "--with-develop"
       - name: perl Makefile.PL
         run: perl Makefile.PL
       - name: make
