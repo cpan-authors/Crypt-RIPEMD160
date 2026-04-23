@@ -71,7 +71,7 @@ rmd160_add(ripemd160, ...)
 	    int i;
 
 	    for (i = 1; i < items; i++) {
-		strptr = (byte *) (SvPV(ST(i), len));
+		strptr = (byte *) (SvPVbyte(ST(i), len));
 #if PTRSIZE > 4
 		/* STRLEN is 64-bit on 64-bit systems but RIPEMD160_update
 		   takes a 32-bit dword length; chunk to avoid truncation */
