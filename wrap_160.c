@@ -57,6 +57,7 @@ void RIPEMD160_update(Crypt__RIPEMD160 ripemd160, const byte *strptr, dword len)
     len -= RIPEMD160_BLOCKSIZE;
     rmd160_compress(ripemd160->MDbuf, X);
   }
+  secure_memzero(X, sizeof(X));
   memcpy(ripemd160->data, strptr, len);
   ripemd160->local = len;
 }
@@ -67,4 +68,9 @@ void RIPEMD160_final(Crypt__RIPEMD160 ripemd160)
 	   ripemd160->data,
 	   (dword) ripemd160->count_lo,
 	   (dword) ripemd160->count_hi);
+
+  secure_memzero(ripemd160->data, sizeof(ripemd160->data));
+  ripemd160->count_lo = 0;
+  ripemd160->count_hi = 0;
+  ripemd160->local = 0;
 }
