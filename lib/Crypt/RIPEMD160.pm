@@ -10,10 +10,9 @@ XSLoader::load('Crypt::RIPEMD160', $VERSION);
 
 use base 'Digest::base';
 
-#package RIPEMD160; # Package-Definition like in Crypt::IDEA
-
-#use strict;
 use Carp;
+
+sub digest_length { 20 }
 
 sub addfile
 {
@@ -179,6 +178,14 @@ C<< unpack("H*", $context->digest()) >>.
 
 Returns the digest as a base64-encoded string (without trailing padding).
 This method is inherited from L<Digest::base>.
+
+=head2 digest_length
+
+    my $len = $context->digest_length;   # 20
+    my $len = Crypt::RIPEMD160->digest_length;
+
+Returns the length of the digest in bytes (always 20 for RIPEMD-160).
+Can be called as a class or instance method.
 
 =head2 clone
 
