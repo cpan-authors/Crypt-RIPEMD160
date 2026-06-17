@@ -1,3 +1,4 @@
+requires 'Digest' => 0;
 requires 'XSLoader' => 0;
 requires 'Carp' => 0;
 
