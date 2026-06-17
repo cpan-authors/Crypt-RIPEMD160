@@ -10,16 +10,13 @@ XSLoader::load('Crypt::RIPEMD160', $VERSION);
 
 use base 'Digest::base';
 
-#package RIPEMD160; # Package-Definition like in Crypt::IDEA
-
-#use strict;
 use Carp;
 
 sub addfile
 {
     no strict 'refs';
     my ($self, $handle) = @_;
-    my ($package, $file, $line) = caller;
+    my $package = caller;
     my ($data);
 
     if (!ref($handle)) {
