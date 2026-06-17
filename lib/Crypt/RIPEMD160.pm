@@ -10,6 +10,8 @@ XSLoader::load('Crypt::RIPEMD160', $VERSION);
 
 use base 'Digest::base';
 
+sub CLONE_SKIP { 1 }
+
 #package RIPEMD160; # Package-Definition like in Crypt::IDEA
 
 #use strict;
@@ -269,6 +271,18 @@ following should all give the same result:
     print "Single string = $d\n";
 
     close($fh);
+
+=head1 THREADS
+
+C<Crypt::RIPEMD160> objects are not cloned across Perl interpreter
+threads.  The underlying C struct is allocated with C<malloc> and
+referenced via a raw pointer; shallow-copying the Perl scalar during
+C<threads-E<gt>create()> would give two interpreters the same pointer,
+leading to double-free crashes on destruction.
+
+C<CLONE_SKIP> is defined so that objects in the parent thread simply
+do not exist in the child thread.  Each thread should create its own
+contexts as needed.
 
 =head1 NOTE
 
