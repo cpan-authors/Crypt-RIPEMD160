@@ -109,6 +109,7 @@ rmd160_digest(ripemd160)
 
 	    RETVAL = newSVpvn((const char *)d_str, 20);
 	    secure_memzero(d_str, sizeof(d_str));
+	    RIPEMD160_init(ripemd160);
 	}
     OUTPUT:
 	RETVAL

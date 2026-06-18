@@ -158,9 +158,9 @@ via C<binmode> to prevent CRLF translation on Windows.
 
     my $digest = $context->digest();
 
-Returns the final message digest as a 20-byte binary string. This is a
-destructive, read-once operation: the context must be B<reset> before
-computing another digest.
+Returns the final message digest as a 20-byte binary string. The
+context is automatically reset afterward, so it can be reused
+immediately for a new computation without calling B<reset>.
 
 =head2 hexdigest
 

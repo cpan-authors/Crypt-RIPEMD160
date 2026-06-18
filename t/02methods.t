@@ -112,6 +112,39 @@ subtest 'reset and reuse' => sub {
 };
 
 # ========================================
+# digest() auto-resets context (Digest API convention)
+# ========================================
+
+subtest 'digest auto-resets context' => sub {
+    my $ctx = Crypt::RIPEMD160->new;
+
+    $ctx->add('abc');
+    my $hex1 = unpack("H*", $ctx->digest);
+    is($hex1, $abc_hex, 'first digest correct');
+
+    # Reuse without explicit reset — should work like Digest::MD5/SHA
+    $ctx->add('abc');
+    my $hex2 = unpack("H*", $ctx->digest);
+    is($hex2, $abc_hex, 'digest after auto-reset produces same result');
+
+    # Different data after auto-reset
+    $ctx->add('');
+    my $hex3 = unpack("H*", $ctx->digest);
+    is($hex3, $empty_hex, 'auto-reset allows different data immediately');
+};
+
+subtest 'hexdigest auto-resets via digest' => sub {
+    my $ctx = Crypt::RIPEMD160->new;
+    $ctx->add('abc');
+    my $hex1 = $ctx->hexdigest;
+    is($hex1, $abc_spaced, 'first hexdigest correct');
+
+    $ctx->add('abc');
+    my $hex2 = $ctx->hexdigest;
+    is($hex2, $abc_spaced, 'hexdigest after auto-reset works');
+};
+
+# ========================================
 # add() with multiple arguments
 # ========================================
 
