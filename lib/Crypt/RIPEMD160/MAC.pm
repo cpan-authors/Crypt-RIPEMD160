@@ -7,6 +7,8 @@ use warnings;
 
 our $VERSION = '0.14';
 
+sub CLONE_SKIP { 1 }
+
 sub new {
     my($pkg, $key) = @_;
 

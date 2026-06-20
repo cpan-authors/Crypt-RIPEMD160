@@ -36,6 +36,7 @@ t/04mac.t
 t/05digest_api.t
 t/05encoding.t
 t/06addfile_binmode.t
+t/07thread_safety.t
 t/pod-coverage.t
 t/pod.t
 typemap
