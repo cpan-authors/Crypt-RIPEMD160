@@ -122,8 +122,8 @@ subtest 'hexdigest format preserved' => sub {
     my $ctx = Crypt::RIPEMD160->new;
     $ctx->add('abc');
     my $hex = $ctx->hexdigest;
-    like($hex, qr/^[0-9a-f]{8}( [0-9a-f]{8}){4}$/,
-         'hexdigest retains space-separated format');
+    like($hex, qr/^[0-9a-f]{40}$/,
+         'hexdigest returns standard continuous hex format');
 };
 
 subtest 'hash class method works' => sub {

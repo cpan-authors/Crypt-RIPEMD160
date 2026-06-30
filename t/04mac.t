@@ -25,7 +25,7 @@ use Crypt::RIPEMD160::MAC;
 
     $mac = Crypt::RIPEMD160::MAC->new("key");
     my $hex = $mac->hexmac();
-    like($hex, qr/^[0-9a-f]{8}(?: [0-9a-f]{8}){4}$/, 'hexmac() format: 5 groups of 8 hex chars');
+    like($hex, qr/^[0-9a-f]{40}$/, 'hexmac() format: 40 hex chars');
 }
 
 # --- mac() and hexmac() consistency ---
@@ -42,10 +42,8 @@ use Crypt::RIPEMD160::MAC;
     $mac2->add($data);
     my $hex = $mac2->hexmac();
 
-    # hexmac is the hex of mac with spaces
     my $expected_hex = unpack("H*", $binary);
-    $expected_hex = join(" ", $expected_hex =~ /(.{8})/g);
-    is($hex, $expected_hex, 'hexmac() matches formatted hex of mac()');
+    is($hex, $expected_hex, 'hexmac() matches hex of mac()');
 }
 
 # --- Determinism: same key+data = same MAC ---

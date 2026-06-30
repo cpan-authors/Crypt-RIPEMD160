@@ -11,7 +11,7 @@ use Crypt::RIPEMD160::MAC;
 
 # Known test vector: RIPEMD-160("abc") = 8eb208f7e05d987a9b044a8e98c6b087f15a0bfc
 my $abc_hex = '8eb208f7e05d987a9b044a8e98c6b087f15a0bfc';
-my $abc_spaced = '8eb208f7 e05d987a 9b044a8e 98c6b087 f15a0bfc';
+my $abc_hexdigest = '8eb208f7e05d987a9b044a8e98c6b087f15a0bfc';
 my $empty_hex = '9c1185a5c5e9fc54612808977ee8f548b2258d31';
 
 # ========================================
@@ -52,8 +52,8 @@ subtest 'hexdigest format' => sub {
     my $ctx = Crypt::RIPEMD160->new;
     $ctx->add('abc');
     my $hex = $ctx->hexdigest;
-    is($hex, $abc_spaced, 'hexdigest returns space-separated hex');
-    like($hex, qr/^[0-9a-f]{8}( [0-9a-f]{8}){4}$/, 'hexdigest format is 5 groups of 8 hex chars');
+    is($hex, $abc_hexdigest, 'hexdigest returns continuous hex');
+    like($hex, qr/^[0-9a-f]{40}$/, 'hexdigest format is 40 hex chars');
 };
 
 # ========================================
@@ -77,13 +77,13 @@ subtest 'hash as instance method' => sub {
 
 subtest 'hexhash as class method' => sub {
     my $hex = Crypt::RIPEMD160->hexhash('abc');
-    is($hex, $abc_spaced, 'class method hexhash works');
+    is($hex, $abc_hexdigest, 'class method hexhash works');
 };
 
 subtest 'hexhash as instance method' => sub {
     my $ctx = Crypt::RIPEMD160->new;
     my $hex = $ctx->hexhash('abc');
-    is($hex, $abc_spaced, 'instance method hexhash works');
+    is($hex, $abc_hexdigest, 'instance method hexhash works');
 };
 
 # ========================================
@@ -301,7 +301,7 @@ subtest 'MAC reset after mac() with long key' => sub {
     $mac->add($data);
     my $hex2 = $mac->hexmac;
 
-    is($hex1, '6466ca07 ac5eac29 e1bd523e 5ada7605 b791fd8b',
+    is($hex1, '6466ca07ac5eac29e1bd523e5ada7605b791fd8b',
        'first mac matches RFC 2286 vector');
     is($hex2, $hex1, 'mac after reset matches first mac');
 };
@@ -317,14 +317,14 @@ subtest 'MAC hexmac() format' => sub {
     my $mac = Crypt::RIPEMD160::MAC->new('key');
     $mac->add('data');
     my $hex = $mac->hexmac;
-    like($hex, qr/^[0-9a-f]{8}( [0-9a-f]{8}){4}$/, 'hexmac format matches hexdigest format');
+    like($hex, qr/^[0-9a-f]{40}$/, 'hexmac format is 40 hex chars');
 };
 
 subtest 'MAC with empty data' => sub {
     my $mac = Crypt::RIPEMD160::MAC->new('key');
     $mac->add('');
     my $hex = $mac->hexmac;
-    like($hex, qr/^[0-9a-f]{8}( [0-9a-f]{8}){4}$/, 'MAC of empty data produces valid output');
+    like($hex, qr/^[0-9a-f]{40}$/, 'MAC of empty data produces valid output');
 };
 
 subtest 'MAC add with multiple arguments' => sub {
@@ -353,7 +353,7 @@ subtest 'MAC addfile' => sub {
     my $hex = $mac->hexmac;
     close $rfh;
 
-    is($hex, 'dda6c021 3a485a9e 24f47420 64a7f033 b43c4069',
+    is($hex, 'dda6c0213a485a9e24f4742064a7f033b43c4069',
        'MAC addfile matches known RFC 2286 test vector');
 };
 
@@ -362,7 +362,7 @@ subtest 'MAC key longer than 64 bytes is hashed' => sub {
     my $mac = Crypt::RIPEMD160::MAC->new(chr(0xaa) x 80);
     $mac->add("Test Using Larger Than Block-Size Key - Hash Key First");
     my $hex = $mac->hexmac;
-    is($hex, '6466ca07 ac5eac29 e1bd523e 5ada7605 b791fd8b',
+    is($hex, '6466ca07ac5eac29e1bd523e5ada7605b791fd8b',
        'long key is correctly hashed before use');
 };
 
@@ -371,14 +371,14 @@ subtest 'MAC key exactly 64 bytes' => sub {
     my $mac = Crypt::RIPEMD160::MAC->new($key);
     $mac->add('test data');
     my $hex = $mac->hexmac;
-    like($hex, qr/^[0-9a-f]{8}( [0-9a-f]{8}){4}$/, 'key of exactly 64 bytes works');
+    like($hex, qr/^[0-9a-f]{40}$/, 'key of exactly 64 bytes works');
 };
 
 subtest 'MAC single byte key' => sub {
     my $mac = Crypt::RIPEMD160::MAC->new('K');
     $mac->add('test');
     my $hex = $mac->hexmac;
-    like($hex, qr/^[0-9a-f]{8}( [0-9a-f]{8}){4}$/, 'single byte key works');
+    like($hex, qr/^[0-9a-f]{40}$/, 'single byte key works');
 };
 
 # ========================================
@@ -599,7 +599,7 @@ subtest 'MAC add chaining produces correct result' => sub {
     my $hex2 = $mac2->hexmac;
 
     is($hex1, $hex2, 'chained MAC add produces same result as sequential');
-    is($hex1, 'dda6c021 3a485a9e 24f47420 64a7f033 b43c4069',
+    is($hex1, 'dda6c0213a485a9e24f4742064a7f033b43c4069',
        'chained result matches RFC 2286 vector');
 };
 

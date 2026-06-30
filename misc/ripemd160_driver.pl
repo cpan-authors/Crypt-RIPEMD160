@@ -42,20 +42,19 @@ if (defined($opt{s})) {
     $ripemd160->add($opt{s});
     print("RIPEMD160(\"$opt{s}\") = " . $ripemd160->hexdigest() . "\n");
 } elsif ($opt{x}) {
-    print "If the following results don't match, check that you have\n";
-    print "correctly set \"LITTLE_ENDIAN\" in rmd160.c.\n";
+    print "Running RIPEMD-160 test vectors:\n";
     print "\n";
     do_test("test1 (\"abc\")",
 	    "abc",
-	    "8eb208f7 e05d987a 9b044a8e 98c6b087 f15a0bfc");
+	    "8eb208f7e05d987a9b044a8e98c6b087f15a0bfc");
 
     do_test("test2 (\"abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq\")",
 	    "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq",
-	    "12a05338 4a9c0c88 e405a06c 27dcf49a da62eb2b");
+	    "12a053384a9c0c88e405a06c27dcf49ada62eb2b");
 
     do_test("test3 (\"a\" x 1000000)",
 	    "a" x 1000000,
-	    "52783243 c1697bdb e16d37f9 7f68f083 25dc1528");
+	    "52783243c1697bdbe16d37f97f68f08325dc1528");
 } else {
     if (@ARGV) {
 	foreach my $file (@ARGV) {

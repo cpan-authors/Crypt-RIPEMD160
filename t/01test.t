@@ -153,19 +153,19 @@ foreach my $key (sort(keys(%data)))
 
 # Tests on raw data
 
-test("24cb4bd6 7d20fc1a 5d2ed773 2dcc3937 7f0a5668", 
+test("24cb4bd67d20fc1a5d2ed7732dcc39377f0a5668", 
      chr(0x0b) x 20, 
      "Hi There");
     
-test("dda6c021 3a485a9e 24f47420 64a7f033 b43c4069", 
+test("dda6c0213a485a9e24f4742064a7f033b43c4069", 
      "Jefe",
      "what do ya want for nothing?");
 
-test("b0b10536 0de75996 0ab4f352 98e116e2 95d8e7c1", 
+test("b0b105360de759960ab4f35298e116e295d8e7c1", 
      chr(0xaa) x 20,
      chr(0xdd) x 50);
 
-test("d5ca862f 4d21d5e6 10e18b4c f1beb97a 4365ecf4", 
+test("d5ca862f4d21d5e610e18b4cf1beb97a4365ecf4", 
      chr(0x01).chr(0x02).chr(0x03).chr(0x04).chr(0x05).
      chr(0x06).chr(0x07).chr(0x08).chr(0x09).chr(0x0a).
      chr(0x0b).chr(0x0c).chr(0x0d).chr(0x0e).chr(0x0f).
@@ -173,19 +173,19 @@ test("d5ca862f 4d21d5e6 10e18b4c f1beb97a 4365ecf4",
      chr(0x15).chr(0x16).chr(0x17).chr(0x18).chr(0x19),
      chr(0xcd) x 50);
 
-test("76196939 78f91d90 539ae786 500ff3d8 e0518e39", 
+test("7619693978f91d90539ae786500ff3d8e0518e39", 
      chr(0x0c) x 20,
      "Test With Truncation");
 
-test("6466ca07 ac5eac29 e1bd523e 5ada7605 b791fd8b", 
+test("6466ca07ac5eac29e1bd523e5ada7605b791fd8b", 
      chr(0xaa) x 80,
      "Test Using Larger Than Block-Size Key - Hash Key First");
 
-test("69ea6079 8d71616c ce5fd087 1e23754c d75d5a0a", 
+test("69ea60798d71616cce5fd0871e23754cd75d5a0a", 
      chr(0xaa) x 80,
      "Test Using Larger Than Block-Size Key and Larger Than One Block-Size Data");
 
-test("69ea6079 8d71616c ce5fd087 1e23754c d75d5a0a", 
+test("69ea60798d71616cce5fd0871e23754cd75d5a0a", 
      chr(0xaa) x 80,
      "Test Using Lar", 
      "ger Than Block-Size K",
