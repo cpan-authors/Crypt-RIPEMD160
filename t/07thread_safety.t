@@ -5,6 +5,7 @@ use warnings;
 
 use Test::More;
 use Config;
+use Scalar::Util 'blessed';
 
 use Crypt::RIPEMD160;
 use Crypt::RIPEMD160::MAC;
@@ -36,8 +37,8 @@ SKIP: {
         my ($thr) = threads->create(sub {
             my @results;
 
-            push @results, defined($ctx) ? 0 : 1;
-            push @results, defined($mac) ? 0 : 1;
+            push @results, blessed($ctx) ? 0 : 1;
+            push @results, blessed($mac) ? 0 : 1;
 
             my $child_ctx = Crypt::RIPEMD160->new;
             $child_ctx->add('abc');
@@ -51,8 +52,8 @@ SKIP: {
         });
 
         my @results = $thr->join;
-        is($results[0], 1, 'RIPEMD160 object not cloned into child');
-        is($results[1], 1, 'MAC object not cloned into child');
+        is($results[0], 1, 'RIPEMD160 object not blessed in child (CLONE_SKIP)');
+        is($results[1], 1, 'MAC object not blessed in child (CLONE_SKIP)');
         is($results[2], '8eb208f7e05d987a9b044a8e98c6b087f15a0bfc',
            'new RIPEMD160 object works in child thread');
         is($results[3], 20, 'new MAC object works in child thread');
