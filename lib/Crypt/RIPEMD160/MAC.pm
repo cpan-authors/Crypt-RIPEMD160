@@ -4,7 +4,6 @@ use Crypt::RIPEMD160 0.03;
 
 use strict;
 use warnings;
-use Carp;
 
 our $VERSION = '0.14';
 
@@ -56,7 +55,6 @@ sub addfile
 {
     my ($self, $handle) = @_;
 
-    binmode($handle);
     $self->{'hash'}->addfile($handle);
 
     return $self;
