@@ -230,6 +230,16 @@ void rmd160_compress(dword *MDbuf, const dword *X)
    MDbuf[4] = MDbuf[0] + bb + ccc;
    MDbuf[0] = ddd;
 
+   /* Scrub intermediate hash state from the stack.  Volatile writes
+      cannot be optimised away even though the variables go out of
+      scope immediately after. */
+   *(volatile dword *)&aa  = 0;  *(volatile dword *)&bb  = 0;
+   *(volatile dword *)&cc  = 0;  *(volatile dword *)&dd  = 0;
+   *(volatile dword *)&ee  = 0;
+   *(volatile dword *)&aaa = 0;  *(volatile dword *)&bbb = 0;
+   *(volatile dword *)&ccc = 0;  *(volatile dword *)&ddd = 0;
+   *(volatile dword *)&eee = 0;
+
    return;
 }
 
