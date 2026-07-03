@@ -270,6 +270,21 @@ following should all give the same result:
 
     close($fh);
 
+=head1 SECURITY CONSIDERATIONS
+
+RIPEMD-160 provides a 160-bit digest and offers 80-bit collision
+resistance.  While no practical collision attack has been published,
+the 80-bit security margin is below the 128-bit minimum recommended
+by NIST and most current standards.
+
+B<For new applications, prefer SHA-256 or SHA-3> (see L<Digest::SHA>).
+RIPEMD-160 remains appropriate when interoperating with protocols that
+require it (e.g. Bitcoin address derivation, legacy OpenPGP
+fingerprints).
+
+This module is B<not suitable> for password hashing.  Use a dedicated
+key derivation function such as bcrypt, scrypt, or Argon2 instead.
+
 =head1 NOTE
 
 The RIPEMD160 extension may be redistributed under the same terms as Perl.
@@ -340,6 +355,6 @@ The RIPEMD-160 interface was written by Christian H. Geuer-Pollmann (CHGEUER)
 
 =head1 SEE ALSO
 
-MD5(3pm) and SHA(1).
+L<Digest>, L<Digest::SHA>, L<Digest::MD5>.
 
 =cut
