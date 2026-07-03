@@ -1,5 +1,46 @@
 Revision history for Perl extension Crypt::RIPEMD160.
 
+0.15 TBD
+
+  BREAKING CHANGE:
+    - hexdigest() now returns a continuous hex string (e.g.
+      '8eb208f7e05d987a...') matching the standard Digest API contract,
+      instead of the non-standard space-separated format ('8eb208f7
+      e05d987a ...'). hexhash() and MAC hexmac() are also affected.
+      Code that parsed the old spaced format must be updated. PR #76
+
+  Bug fixes:
+    - Auto-reset context after digest() to match Digest::MD5 and
+      Digest::SHA conventions, allowing object reuse without explicit
+      reset(). PR #72
+    - Add CLONE_SKIP to Crypt::RIPEMD160 and Crypt::RIPEMD160::MAC to
+      prevent double-free crashes when objects exist across Perl
+      interpreter threads. PR #75
+    - Declare Digest as a runtime prerequisite in Makefile.PL and
+      cpanfile, fixing "Can't locate Digest/base.pm" on minimal Perl
+      installations. PR #71
+    - Zero message-data buffers in RIPEMD160_update and RIPEMD160_final
+      to prevent sensitive input from lingering on the stack. PR #67
+    - Zero compression function intermediates and XS digest extraction
+      buffer after use, closing the last gaps in the memory-zeroing
+      arc. PR #68, PR #71
+
+  Improvements:
+    - Add digest_length() method returning the constant 20, avoiding
+      the throwaway-context overhead of Digest::base's fallback. PR #68
+
+  Maintenance:
+    - Add SECURITY CONSIDERATIONS section documenting RIPEMD-160's
+      80-bit collision resistance and appropriate use cases. Modernize
+      SEE ALSO references to link Digest, Digest::SHA, Digest::MD5.
+      PR #73
+    - Add THREADS section documenting CLONE_SKIP behavior. PR #75
+    - Remove dead imports, redundant binmode call, and commented-out
+      legacy code from Perl modules. PR #70
+    - Fix CI multi-Perl matrix failures on Perl < 5.24 by removing
+      cpm dependency installation step from the matrix job (all
+      runtime and test dependencies are core Perl). PR #74
+
 0.14 2026-04-23
 
   Maintenance:
