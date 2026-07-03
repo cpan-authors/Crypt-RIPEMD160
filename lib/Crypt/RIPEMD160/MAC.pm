@@ -168,8 +168,8 @@ another MAC with the same key.
 
     my $string = $mac->hexmac();
 
-Like B<mac>, but returns the result as a printable string of
-hexadecimal digits in five space-separated groups of eight characters.
+Like B<mac>, but returns the result as a 40-character lowercase
+hexadecimal string.
 
 =head1 EXAMPLES
 

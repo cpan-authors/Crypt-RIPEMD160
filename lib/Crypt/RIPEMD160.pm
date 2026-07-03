@@ -34,17 +34,6 @@ sub addfile
     return $self;
 }
 
-sub hexdigest
-{
-    my ($self) = shift;
-    my ($tmp);
-
-    $tmp = unpack("H*", ($self->digest()));
-    return(substr($tmp, 0,8) . " " . substr($tmp, 8,8) . " " .
-	   substr($tmp,16,8) . " " . substr($tmp,24,8) . " " .
-	   substr($tmp,32,8));
-}
-
 sub hash
 {
     my($self, $data) = @_;
@@ -166,12 +155,14 @@ computing another digest.
 
     my $string = $context->hexdigest();
 
-Calls B<digest> and returns the result as a printable string of
-hexadecimal digits in five space-separated groups of eight characters.
+Returns the digest as a 40-character lowercase hexadecimal string.
+This method is inherited from L<Digest::base> and returns the same
+continuous format used by L<Digest::MD5>, L<Digest::SHA>, and all
+other standard L<Digest> modules.
 
-B<Note:> This format differs from the continuous hex string returned
-by most L<Digest> modules. For a continuous hex string, use
-C<< unpack("H*", $context->digest()) >>.
+B<Note:> Prior to version 0.15, this method returned the hex string
+in five space-separated groups of eight characters. Code that parsed
+the old spaced format should be updated.
 
 =head2 b64digest
 
@@ -202,8 +193,8 @@ temporary context) or on an existing instance (slightly more efficient).
     my $string = Crypt::RIPEMD160->hexhash(SCALAR);
     my $string = $context->hexhash(SCALAR);
 
-Like B<hash>, but returns the result as a hex string (same format as
-B<hexdigest>).
+Like B<hash>, but returns the result as a continuous hexadecimal string
+(same format as B<hexdigest>).
 
 =head1 EXAMPLES
 
