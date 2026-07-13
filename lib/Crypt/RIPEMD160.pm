@@ -18,7 +18,7 @@ sub addfile
 {
     no strict 'refs';
     my ($self, $handle) = @_;
-    my ($package, $file, $line) = caller;
+    my $package = caller;
     my ($data);
 
     if (!ref($handle)) {
