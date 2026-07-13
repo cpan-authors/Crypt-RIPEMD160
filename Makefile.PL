@@ -16,6 +16,7 @@ WriteMakefile(
     'PL_FILES'            => {},
     ($ExtUtils::MakeMaker::VERSION >= 6.3002 ? ('LICENSE'        => 'perl', ) : ()),
     PREREQ_PM => {
+        'Digest'     => 0,
         'XSLoader'   => 0,
     },
     ($ExtUtils::MakeMaker::VERSION >= 6.64 ? (TEST_REQUIRES => {
