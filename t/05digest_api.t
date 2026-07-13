@@ -20,6 +20,26 @@ subtest 'isa Digest::base' => sub {
 };
 
 # ========================================
+# digest_length
+# ========================================
+
+subtest 'digest_length as instance method' => sub {
+    my $ctx = Crypt::RIPEMD160->new;
+    is($ctx->digest_length, 20, 'instance digest_length returns 20');
+};
+
+subtest 'digest_length as class method' => sub {
+    is(Crypt::RIPEMD160->digest_length, 20, 'class digest_length returns 20');
+};
+
+subtest 'digest_length matches actual digest' => sub {
+    my $ctx = Crypt::RIPEMD160->new;
+    $ctx->add('test');
+    is(length($ctx->digest), $ctx->new->digest_length,
+       'digest output length equals digest_length');
+};
+
+# ========================================
 # b64digest (provided by Digest::base)
 # ========================================
 

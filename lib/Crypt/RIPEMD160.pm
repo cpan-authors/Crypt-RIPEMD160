@@ -10,16 +10,17 @@ XSLoader::load('Crypt::RIPEMD160', $VERSION);
 
 use base 'Digest::base';
 
-#package RIPEMD160; # Package-Definition like in Crypt::IDEA
+sub CLONE_SKIP { 1 }
 
-#use strict;
 use Carp;
+
+sub digest_length { 20 }
 
 sub addfile
 {
     no strict 'refs';
     my ($self, $handle) = @_;
-    my ($package, $file, $line) = caller;
+    my $package = caller;
     my ($data);
 
     if (!ref($handle)) {
@@ -180,6 +181,14 @@ C<< unpack("H*", $context->digest()) >>.
 Returns the digest as a base64-encoded string (without trailing padding).
 This method is inherited from L<Digest::base>.
 
+=head2 digest_length
+
+    my $len = $context->digest_length;   # 20
+    my $len = Crypt::RIPEMD160->digest_length;
+
+Returns the length of the digest in bytes (always 20 for RIPEMD-160).
+Can be called as a class or instance method.
+
 =head2 clone
 
     my $copy = $context->clone();
@@ -270,6 +279,34 @@ following should all give the same result:
 
     close($fh);
 
+=head1 THREADS
+
+C<Crypt::RIPEMD160> objects are not cloned across Perl interpreter
+threads.  The underlying C struct is allocated with C<malloc> and
+referenced via a raw pointer; shallow-copying the Perl scalar during
+C<threads-E<gt>create()> would give two interpreters the same pointer,
+leading to double-free crashes on destruction.
+
+C<CLONE_SKIP> is defined so that objects in the parent thread simply
+do not exist in the child thread.  Each thread should create its own
+contexts as needed.  The same applies to L<Crypt::RIPEMD160::MAC>
+objects.
+
+=head1 SECURITY CONSIDERATIONS
+
+RIPEMD-160 provides a 160-bit digest and offers 80-bit collision
+resistance.  While no practical collision attack has been published,
+the 80-bit security margin is below the 128-bit minimum recommended
+by NIST and most current standards.
+
+B<For new applications, prefer SHA-256 or SHA-3> (see L<Digest::SHA>).
+RIPEMD-160 remains appropriate when interoperating with protocols that
+require it (e.g. Bitcoin address derivation, legacy OpenPGP
+fingerprints).
+
+This module is B<not suitable> for password hashing.  Use a dedicated
+key derivation function such as bcrypt, scrypt, or Argon2 instead.
+
 =head1 NOTE
 
 The RIPEMD160 extension may be redistributed under the same terms as Perl.
@@ -340,6 +377,6 @@ The RIPEMD-160 interface was written by Christian H. Geuer-Pollmann (CHGEUER)
 
 =head1 SEE ALSO
 
-MD5(3pm) and SHA(1).
+L<Digest>, L<Digest::SHA>, L<Digest::MD5>.
 
 =cut
