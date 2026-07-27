@@ -54,11 +54,19 @@ sub add {
 
 sub addfile
 {
+    no strict 'refs';
     my ($self, $handle) = @_;
+    my ($package) = caller;
 
+    if (!ref($handle)) {
+	$handle = $package . "::" . $handle unless ($handle =~ /(\:\:|\')/);
+    }
     binmode($handle);
-    $self->{'hash'}->addfile($handle);
-
+    my ($data, $n);
+    while ($n = read($handle, $data, 8192)) {
+	$self->add($data);
+    }
+    croak "addfile read failed: $!" unless defined $n;
     return $self;
 }
 
