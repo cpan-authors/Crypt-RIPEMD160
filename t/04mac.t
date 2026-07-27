@@ -299,6 +299,49 @@ use Crypt::RIPEMD160::MAC;
     is($d_file, $d_empty, 'addfile() on empty file matches empty-message MAC');
 }
 
+# --- addfile() with bare glob filehandle ---
+
+{
+    my $key  = "bare-glob-test";
+    my $data = "bare filehandle content for MAC test\n";
+
+    my ($tmp, $filename) = tempfile(UNLINK => 1);
+    print $tmp $data;
+    close $tmp;
+
+    # MAC via add for reference
+    my $mac_ref = Crypt::RIPEMD160::MAC->new($key);
+    $mac_ref->add($data);
+    my $d_ref = $mac_ref->mac();
+
+    # MAC via addfile with bare glob
+    open(MAC_BARE_FH, '<', $filename) or die "Cannot open $filename: $!";
+    my $mac1 = Crypt::RIPEMD160::MAC->new($key);
+    $mac1->addfile(*MAC_BARE_FH);
+    my $d1 = $mac1->mac();
+    close MAC_BARE_FH;
+
+    is($d1, $d_ref, 'addfile() with bare glob produces correct MAC');
+
+    # MAC via addfile with glob reference
+    open(MAC_BARE_FH, '<', $filename) or die "Cannot open $filename: $!";
+    my $mac2 = Crypt::RIPEMD160::MAC->new($key);
+    $mac2->addfile(\*MAC_BARE_FH);
+    my $d2 = $mac2->mac();
+    close MAC_BARE_FH;
+
+    is($d2, $d_ref, 'addfile() with glob ref produces correct MAC');
+
+    # MAC via addfile with qualified string name
+    open(MAC_BARE_FH, '<', $filename) or die "Cannot open $filename: $!";
+    my $mac3 = Crypt::RIPEMD160::MAC->new($key);
+    $mac3->addfile("main::MAC_BARE_FH");
+    my $d3 = $mac3->mac();
+    close MAC_BARE_FH;
+
+    is($d3, $d_ref, 'addfile() with qualified string name produces correct MAC');
+}
+
 # --- Large data (multiple blocks) ---
 
 {
